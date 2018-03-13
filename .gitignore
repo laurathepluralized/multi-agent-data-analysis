@@ -1,3 +1,4 @@
+### Github's official Python .gitignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -99,3 +100,27 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+### Additional gitignore patterns
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*.*~
+*.*#
+*.swo
+
+# Debug Output
+gdb.txt
+.gdbinit
+gdb_monitor.log
+callgrind*
+
+# Text editor extensions
+.ycm_extra_conf.py
+
+# Misc.
+Makefile
+rebuild.sh
