@@ -52,6 +52,8 @@ function tick() {
 
 
 //d3.json("wine_quality.csv", function(plotdata) {
+
+    plotdata.push(
         plotdata.forEach(function(d) {
             console.log('this is where intermediary data processing would go')
         });
