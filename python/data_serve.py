@@ -2,6 +2,7 @@
 #
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+import summary2json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -16,9 +17,12 @@ def test_message(message):
     emit('my response', {'data': 'got it!'})
 
 
-@socketio.on('req')
-def test_message(message):
-    emit('newdata', { 'x': 5, 'y': 1 })
+@socketio.on('datareq')
+def send_data(datadir):
+    thedata = summary2json.glob2json(filename, jobnum, False)
+    # I have no idea what I'm doing. Is this a reasonable size of thing to cram 
+    # into one emit message?
+    emit('newdata', thedata)
 
 if __name__ == '__main__':
     socketio.run(app)
