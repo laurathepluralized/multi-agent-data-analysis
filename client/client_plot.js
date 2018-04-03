@@ -1,5 +1,45 @@
 
 
+
+// The following is (loosely) based on the tutorial here:
+// https://www.shanelynn.ie/asynchronous-updates-to-a-webpage-with-flask-and-socket-io/
+// and the github repo here:
+// https://github.com/Chainfrog-dev/async_flask_2
+$(document).ready(function() {
+    namespace = '/testing';
+    var socket = io.connect('http://' + document.domain + '"' + location.port + '/testing');
+    var received_data = [];
+
+    socket.on('connect', function() {
+        socket.emit('connect_event', {data: 'connected from js side!'});
+    });
+
+    socket.on('newnum', function(msg) {
+        console.log('Got number ' + msg.number);
+
+        if (received_data.length >= 20) {
+            received_data.shift()
+        }
+        received_data.push(msg.number);
+        num_string = '';
+
+        for (var ii = 0; ii < received_data.length; ii++) {
+            num_string = num_string + '<p>' + received_data[ii].toString() + '</p>';
+        }
+
+        $('#log').html(num_string);
+    });
+});
+
+
+
+
+
+
+
+
+
+
 var axPadding = 50;
 var svgSize = {width: 1000, height: 800};
 var margin = {top: 20, right: 5, bottom: 20, left: 100};
@@ -11,36 +51,36 @@ var height = heightWithTitle - axPadding;
 
 
 
-// Based on 
-// https://stackoverflow.com/questions/14118076/socket-io-server-to-server/24657202#24657202
-var socket = io('http://localhost');
+// // Based on 
+// // https://stackoverflow.com/questions/14118076/socket-io-server-to-server/24657202#24657202
+// var socket = io('http://localhost');
 
-socket.on('connect', function(sock) {
-    console.log('got connection message from server!');
+// socket.on('connect', function(socket) {
+//     console.log('got connection message from server!');
 
-    socket.on('message', function(msgdata) {
-        console.log('message: ' + msgdata);
-    });
+//     socket.on('message', function(msgdata) {
+//         console.log('message: ' + msgdata);
+//     });
 
-    socket.on('json', function(data) {
-        console.log('json: ' + data);
-        console.log('TODO: make nice plots');
-    });
-
-
+//     socket.on('json', function(data) {
+//         console.log('json: ' + data);
+//         console.log('TODO: make nice plots');
+//     });
 
 
-});
 
-socket.on('newdata', function(d) {
-    d = JSON.parse(d);
-    data.push({
-        x: +d.x,
-        y: +d.y
-    });
 
-    tick();
-});
+// });
+
+// socket.on('newdata', function(d) {
+//     d = JSON.parse(d);
+//     data.push({
+//         x: +d.x,
+//         y: +d.y
+//     });
+
+//     tick();
+// });
 
 // Click on scatter point point, print out the name of the mission file (or the 
 // parmeters from the mission file)
