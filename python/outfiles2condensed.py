@@ -3,12 +3,13 @@ import os
 import sys
 import numpy as np
 import json
+import pickle
 import pandas as pd
 from pandas import Series
 import xml.etree.ElementTree as ET
 import glob
 import argparse
-import lvdb
+import pdb
 
 def ensure_dir_exists (datadir):
     dir = os.path.dirname(datadir)
@@ -22,7 +23,7 @@ def df_to_csv(thedf, thefilename):
     thedf.to_csv(thefilename, index_label='index');
 
 def df_to_json(thedf, thefilename):
-    thedf.to_json(thefilename, orient='index');
+    thedf.to_json(thefilename, orient='records', double_precision = 10, force_ascii = True);
 
 def glob2df(datadir):
     print(datadir)
@@ -30,13 +31,18 @@ def glob2df(datadir):
 
     df_list = []
 
+    counter = 0;
     # for filename, missionname in zip(sorted(data_files), sorted(mission_files)):
     for dirname in sorted(thepaths):
 
-        print('Results directory: ', dirname)
+        counter += 1;
+        if counter > 10:
+            print('...')
+            counter = 0;
+        # print('Results directory: ', dirname)
         
         if dirname.endswith('latest/'):
-            print('skipping latest directory to avoid duplicate records')
+            # print('skipping latest directory to avoid duplicate records')
             continue;
 
         summary_exists = False
@@ -59,7 +65,7 @@ def glob2df(datadir):
         # if this doesn't contain mission.xml and doesn't contain summary.csv,
         # don't put it in our data
         if not mission_exists and not summary_exists:
-            print('Skipping directory ', dirname)
+            # print('Skipping directory ', dirname)
             continue;
 
         try:
@@ -108,10 +114,10 @@ def glob2df(datadir):
             thisjob_params_df = xml_param_df_cols(missionname);
             num_lines = len(thisjob_df.index)
             if num_lines < 1:
-                lvdb.set_trace()
+                pdb.set_trace()
             df_to_append = pd.concat([thisjob_params_df]*num_lines, ignore_index=True);
             if (df_to_append.empty):
-                lvdb.set_trace()
+                pdb.set_trace()
         else:
             print('No mission.xml at location ', missionname, \
                 '; not including mission params')
@@ -209,7 +215,7 @@ def xml_param_df_cols(mission_file_name):
                 try:
                     toappend += '~' + ent_common_type
                 except:
-                    lvdb.set_trace()
+                    pdb.set_trace()
 
             aut_block = child.find('autonomy')
             motion_block = child.find('motion_model')
@@ -256,7 +262,7 @@ def xml_param_df_cols(mission_file_name):
     # Return a df of all modified attributes of all teams, with team number 
     # suffixes and/or entity_common attributes in column names
     if big_df_params.empty:
-        lvdb.set_trace();
+        pdb.set_trace();
     return big_df_params;
 
 
@@ -286,8 +292,10 @@ def main ():
 
     # generate pickle if none exists or if args.repickle is set to true
     if not args.repickle:
+        print('Looking for pickle file ', picklename)
         try:
-            thedf = pickle.load(picklename, 'rb')
+            thedf = pd.read_pickle(picklename)
+            print('Loaded pickle file ', picklename)
         except:
             print('No pickle found or error reading pickle. Generating new' \
             ' pickle.')
@@ -298,7 +306,7 @@ def main ():
         print('Regenerating pickle file at ', picklename)
         # argument explicitly given to regenerate the pickle file
         thedf = glob2df(args.path)
-        thedf.reset_index(inplace=True)
+        thedf.reset_index(inplace=True, drop=True)
         df_to_pickle(thedf, picklename);
 
     # Generate json
