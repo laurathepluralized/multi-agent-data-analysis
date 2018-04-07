@@ -124,8 +124,9 @@ def glob2df(datadir):
         if not df_to_append.empty:
             this_job_df = pd.concat([thisjob_df, df_to_append], axis=1);
 
-        indexed_by_team_df = this_job_df.set_index(['team_id'])
-        df_list.append(indexed_by_team_df)
+        # indexed_by_team_df = this_job_df.set_index(['team_id'])
+        # df_list.append(indexed_by_team_df)
+        df_list.append(this_job_df)
 
     df = pd.concat(df_list)
 
@@ -190,6 +191,7 @@ def xml_param_df_cols(mission_file_name):
                     ent_common_type = child.attrib['entity_common']
                 except KeyError:
                     ent_common_type = None
+                    pass;
 
             theteam = '0'
             theteamtag = child.find('team_id')
@@ -199,19 +201,20 @@ def xml_param_df_cols(mission_file_name):
 
             teamint = int(theteam)
 
-            entdf = pd.DataFrame
-            if (theteam in team_keys):
-                team_keys.append(theteam + 'a')
-            else:
-                team_keys.append(theteam)
-            key_idx += 1;
+            entdf = pd.DataFrame()
+            if (teamint != 0):
+                if (theteam in team_keys):
+                    team_keys.append(theteam + 'a')
+                else:
+                    team_keys.append(theteam)
+                key_idx += 1;
 
             toappend = ''
             if (teamint != 0):
-                toappend += '~t~' + team_keys[key_idx]
+                toappend += '_t_' + team_keys[key_idx]
             if ent_common_type is not None:
                 try:
-                    toappend += '~' + ent_common_type
+                    toappend += '_' + ent_common_type
                 except:
                     pdb.set_trace()
 
