@@ -1,0 +1,200 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "simulationTrial",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "index",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "team_id",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "score",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "teamCapture",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "nonTeamCapture",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "job_num",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "task_num",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "results_dir",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "num_rows",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "align_weight_t_1",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "avoid_nonteam_weight_t_1",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "avoid_team_weight_t_1",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "centroid_weight_t_1",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "comms_range_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "fov_az_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "fov_el_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "goal_weight_t_1",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "max_pred_speed_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "max_speed_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "sphere_of_influence_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "motion_model_t_1",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "vel_max_t_1",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "motion_model_predator",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pitch_rate_max_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "turn_rate_max_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "vel_max_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "align_weight_t_2_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "allow_prey_switching_t_2_predator",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "autonomy_t_2_predator",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "avoid_nonteam_weight_t_2_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "avoid_team_weight_t_2_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "capture_range_t_2_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "centroid_weight_t_2_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "comms_range_t_2_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "max_pred_speed_t_2_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "max_speed_t_2_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "align_weight_t_3_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "allow_prey_switching_t_3_predator",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "autonomy_t_3_predator",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "avoid_nonteam_weight_t_3_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "avoid_team_weight_t_3_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "capture_range_t_3_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "centroid_weight_t_3_predator",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "comms_range_t_3_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "max_pred_speed_t_3_predator",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "max_speed_t_3_predator",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20180407212216",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "simulation_run",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

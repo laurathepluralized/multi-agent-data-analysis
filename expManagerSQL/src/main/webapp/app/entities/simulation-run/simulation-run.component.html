@@ -1,0 +1,158 @@
+<div>
+    <h2>
+        <span>Simulation Runs</span>
+        <button class="btn btn-primary float-right jh-create-entity create-simulation-run" [routerLink]="['/', { outlets: { popup: ['simulation-run-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Simulation Run
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="simulationRuns">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="simulationTrial"><span>Simulation Trial</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="index"><span>Index</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="team_id"><span>Team Id</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="score"><span>Score</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="teamCapture"><span>Team Capture</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="nonTeamCapture"><span>Non Team Capture</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="job_num"><span>Job Num</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="task_num"><span>Task Num</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="results_dir"><span>Results Dir</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="num_rows"><span>Num Rows</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="align_weight_t_1"><span>Align Weight T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="avoid_nonteam_weight_t_1"><span>Avoid Nonteam Weight T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="avoid_team_weight_t_1"><span>Avoid Team Weight T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="centroid_weight_t_1"><span>Centroid Weight T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="comms_range_t_1"><span>Comms Range T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="fov_az_t_1"><span>Fov Az T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="fov_el_t_1"><span>Fov El T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="goal_weight_t_1"><span>Goal Weight T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="max_pred_speed_t_1"><span>Max Pred Speed T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="max_speed_t_1"><span>Max Speed T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="sphere_of_influence_t_1"><span>Sphere Of Influence T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="motion_model_t_1"><span>Motion Model T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="vel_max_t_1"><span>Vel Max T 1</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="motion_model_predator"><span>Motion Model Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="pitch_rate_max_predator"><span>Pitch Rate Max Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="turn_rate_max_predator"><span>Turn Rate Max Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="vel_max_predator"><span>Vel Max Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="align_weight_t_2_predator"><span>Align Weight T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="allow_prey_switching_t_2_predator"><span>Allow Prey Switching T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="autonomy_t_2_predator"><span>Autonomy T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="avoid_nonteam_weight_t_2_predator"><span>Avoid Nonteam Weight T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="avoid_team_weight_t_2_predator"><span>Avoid Team Weight T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="capture_range_t_2_predator"><span>Capture Range T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="centroid_weight_t_2_predator"><span>Centroid Weight T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="comms_range_t_2_predator"><span>Comms Range T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="max_pred_speed_t_2_predator"><span>Max Pred Speed T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="max_speed_t_2_predator"><span>Max Speed T 2 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="align_weight_t_3_predator"><span>Align Weight T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="allow_prey_switching_t_3_predator"><span>Allow Prey Switching T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="autonomy_t_3_predator"><span>Autonomy T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="avoid_nonteam_weight_t_3_predator"><span>Avoid Nonteam Weight T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="avoid_team_weight_t_3_predator"><span>Avoid Team Weight T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="capture_range_t_3_predator"><span>Capture Range T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="centroid_weight_t_3_predator"><span>Centroid Weight T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="comms_range_t_3_predator"><span>Comms Range T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="max_pred_speed_t_3_predator"><span>Max Pred Speed T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="max_speed_t_3_predator"><span>Max Speed T 3 Predator</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let simulationRun of simulationRuns ;trackBy: trackId">
+                <td><a [routerLink]="['../simulation-run', simulationRun.id ]">{{simulationRun.id}}</a></td>
+                <td>{{simulationRun.simulationTrial}}</td>
+                <td>{{simulationRun.index}}</td>
+                <td>{{simulationRun.team_id}}</td>
+                <td>{{simulationRun.score}}</td>
+                <td>{{simulationRun.teamCapture}}</td>
+                <td>{{simulationRun.nonTeamCapture}}</td>
+                <td>{{simulationRun.job_num}}</td>
+                <td>{{simulationRun.task_num}}</td>
+                <td>{{simulationRun.results_dir}}</td>
+                <td>{{simulationRun.num_rows}}</td>
+                <td>{{simulationRun.align_weight_t_1}}</td>
+                <td>{{simulationRun.avoid_nonteam_weight_t_1}}</td>
+                <td>{{simulationRun.avoid_team_weight_t_1}}</td>
+                <td>{{simulationRun.centroid_weight_t_1}}</td>
+                <td>{{simulationRun.comms_range_t_1}}</td>
+                <td>{{simulationRun.fov_az_t_1}}</td>
+                <td>{{simulationRun.fov_el_t_1}}</td>
+                <td>{{simulationRun.goal_weight_t_1}}</td>
+                <td>{{simulationRun.max_pred_speed_t_1}}</td>
+                <td>{{simulationRun.max_speed_t_1}}</td>
+                <td>{{simulationRun.sphere_of_influence_t_1}}</td>
+                <td>{{simulationRun.motion_model_t_1}}</td>
+                <td>{{simulationRun.vel_max_t_1}}</td>
+                <td>{{simulationRun.motion_model_predator}}</td>
+                <td>{{simulationRun.pitch_rate_max_predator}}</td>
+                <td>{{simulationRun.turn_rate_max_predator}}</td>
+                <td>{{simulationRun.vel_max_predator}}</td>
+                <td>{{simulationRun.align_weight_t_2_predator}}</td>
+                <td>{{simulationRun.allow_prey_switching_t_2_predator}}</td>
+                <td>{{simulationRun.autonomy_t_2_predator}}</td>
+                <td>{{simulationRun.avoid_nonteam_weight_t_2_predator}}</td>
+                <td>{{simulationRun.avoid_team_weight_t_2_predator}}</td>
+                <td>{{simulationRun.capture_range_t_2_predator}}</td>
+                <td>{{simulationRun.centroid_weight_t_2_predator}}</td>
+                <td>{{simulationRun.comms_range_t_2_predator}}</td>
+                <td>{{simulationRun.max_pred_speed_t_2_predator}}</td>
+                <td>{{simulationRun.max_speed_t_2_predator}}</td>
+                <td>{{simulationRun.align_weight_t_3_predator}}</td>
+                <td>{{simulationRun.allow_prey_switching_t_3_predator}}</td>
+                <td>{{simulationRun.autonomy_t_3_predator}}</td>
+                <td>{{simulationRun.avoid_nonteam_weight_t_3_predator}}</td>
+                <td>{{simulationRun.avoid_team_weight_t_3_predator}}</td>
+                <td>{{simulationRun.capture_range_t_3_predator}}</td>
+                <td>{{simulationRun.centroid_weight_t_3_predator}}</td>
+                <td>{{simulationRun.comms_range_t_3_predator}}</td>
+                <td>{{simulationRun.max_pred_speed_t_3_predator}}</td>
+                <td>{{simulationRun.max_speed_t_3_predator}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../simulation-run', simulationRun.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'simulation-run/'+ simulationRun.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'simulation-run/'+ simulationRun.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="simulationRuns && simulationRuns.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

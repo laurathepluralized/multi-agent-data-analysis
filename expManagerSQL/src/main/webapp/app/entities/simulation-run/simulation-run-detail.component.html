@@ -1,0 +1,210 @@
+
+<div *ngIf="simulationRun">
+    <h2><span>Simulation Run</span> {{simulationRun.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Simulation Trial</span></dt>
+        <dd>
+            <span>{{simulationRun.simulationTrial}}</span>
+        </dd>
+        <dt><span>Index</span></dt>
+        <dd>
+            <span>{{simulationRun.index}}</span>
+        </dd>
+        <dt><span>Team Id</span></dt>
+        <dd>
+            <span>{{simulationRun.team_id}}</span>
+        </dd>
+        <dt><span>Score</span></dt>
+        <dd>
+            <span>{{simulationRun.score}}</span>
+        </dd>
+        <dt><span>Team Capture</span></dt>
+        <dd>
+            <span>{{simulationRun.teamCapture}}</span>
+        </dd>
+        <dt><span>Non Team Capture</span></dt>
+        <dd>
+            <span>{{simulationRun.nonTeamCapture}}</span>
+        </dd>
+        <dt><span>Job Num</span></dt>
+        <dd>
+            <span>{{simulationRun.job_num}}</span>
+        </dd>
+        <dt><span>Task Num</span></dt>
+        <dd>
+            <span>{{simulationRun.task_num}}</span>
+        </dd>
+        <dt><span>Results Dir</span></dt>
+        <dd>
+            <span>{{simulationRun.results_dir}}</span>
+        </dd>
+        <dt><span>Num Rows</span></dt>
+        <dd>
+            <span>{{simulationRun.num_rows}}</span>
+        </dd>
+        <dt><span>Align Weight T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.align_weight_t_1}}</span>
+        </dd>
+        <dt><span>Avoid Nonteam Weight T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.avoid_nonteam_weight_t_1}}</span>
+        </dd>
+        <dt><span>Avoid Team Weight T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.avoid_team_weight_t_1}}</span>
+        </dd>
+        <dt><span>Centroid Weight T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.centroid_weight_t_1}}</span>
+        </dd>
+        <dt><span>Comms Range T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.comms_range_t_1}}</span>
+        </dd>
+        <dt><span>Fov Az T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.fov_az_t_1}}</span>
+        </dd>
+        <dt><span>Fov El T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.fov_el_t_1}}</span>
+        </dd>
+        <dt><span>Goal Weight T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.goal_weight_t_1}}</span>
+        </dd>
+        <dt><span>Max Pred Speed T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.max_pred_speed_t_1}}</span>
+        </dd>
+        <dt><span>Max Speed T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.max_speed_t_1}}</span>
+        </dd>
+        <dt><span>Sphere Of Influence T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.sphere_of_influence_t_1}}</span>
+        </dd>
+        <dt><span>Motion Model T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.motion_model_t_1}}</span>
+        </dd>
+        <dt><span>Vel Max T 1</span></dt>
+        <dd>
+            <span>{{simulationRun.vel_max_t_1}}</span>
+        </dd>
+        <dt><span>Motion Model Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.motion_model_predator}}</span>
+        </dd>
+        <dt><span>Pitch Rate Max Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.pitch_rate_max_predator}}</span>
+        </dd>
+        <dt><span>Turn Rate Max Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.turn_rate_max_predator}}</span>
+        </dd>
+        <dt><span>Vel Max Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.vel_max_predator}}</span>
+        </dd>
+        <dt><span>Align Weight T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.align_weight_t_2_predator}}</span>
+        </dd>
+        <dt><span>Allow Prey Switching T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.allow_prey_switching_t_2_predator}}</span>
+        </dd>
+        <dt><span>Autonomy T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.autonomy_t_2_predator}}</span>
+        </dd>
+        <dt><span>Avoid Nonteam Weight T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.avoid_nonteam_weight_t_2_predator}}</span>
+        </dd>
+        <dt><span>Avoid Team Weight T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.avoid_team_weight_t_2_predator}}</span>
+        </dd>
+        <dt><span>Capture Range T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.capture_range_t_2_predator}}</span>
+        </dd>
+        <dt><span>Centroid Weight T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.centroid_weight_t_2_predator}}</span>
+        </dd>
+        <dt><span>Comms Range T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.comms_range_t_2_predator}}</span>
+        </dd>
+        <dt><span>Max Pred Speed T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.max_pred_speed_t_2_predator}}</span>
+        </dd>
+        <dt><span>Max Speed T 2 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.max_speed_t_2_predator}}</span>
+        </dd>
+        <dt><span>Align Weight T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.align_weight_t_3_predator}}</span>
+        </dd>
+        <dt><span>Allow Prey Switching T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.allow_prey_switching_t_3_predator}}</span>
+        </dd>
+        <dt><span>Autonomy T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.autonomy_t_3_predator}}</span>
+        </dd>
+        <dt><span>Avoid Nonteam Weight T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.avoid_nonteam_weight_t_3_predator}}</span>
+        </dd>
+        <dt><span>Avoid Team Weight T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.avoid_team_weight_t_3_predator}}</span>
+        </dd>
+        <dt><span>Capture Range T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.capture_range_t_3_predator}}</span>
+        </dd>
+        <dt><span>Centroid Weight T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.centroid_weight_t_3_predator}}</span>
+        </dd>
+        <dt><span>Comms Range T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.comms_range_t_3_predator}}</span>
+        </dd>
+        <dt><span>Max Pred Speed T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.max_pred_speed_t_3_predator}}</span>
+        </dd>
+        <dt><span>Max Speed T 3 Predator</span></dt>
+        <dd>
+            <span>{{simulationRun.max_speed_t_3_predator}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'simulation-run/'+ simulationRun.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

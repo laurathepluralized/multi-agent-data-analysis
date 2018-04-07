@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="autoIncrement" value="true"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity SimulationRun.
+    -->
+    <changeSet id="20180407212216-1" author="jhipster">
+        <createTable tableName="simulation_run">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="simulation_trial" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="jhi_index" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="team_id" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="score" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="team_capture" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="non_team_capture" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="job_num" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="task_num" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="results_dir" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="num_rows" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="align_weight_t_1" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="avoid_nonteam_weight_t_1" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="avoid_team_weight_t_1" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="centroid_weight_t_1" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="comms_range_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fov_az_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fov_el_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="goal_weight_t_1" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="max_pred_speed_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="max_speed_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="sphere_of_influence_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="motion_model_t_1" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="vel_max_t_1" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="motion_model_predator" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="pitch_rate_max_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="turn_rate_max_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="vel_max_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="align_weight_t_2_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="allow_prey_switching_t_2_predator" type="bit">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="autonomy_t_2_predator" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="avoid_nonteam_weight_t_2_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="avoid_team_weight_t_2_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="capture_range_t_2_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="centroid_weight_t_2_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="comms_range_t_2_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="max_pred_speed_t_2_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="max_speed_t_2_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="align_weight_t_3_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="allow_prey_switching_t_3_predator" type="bit">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="autonomy_t_3_predator" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="avoid_nonteam_weight_t_3_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="avoid_team_weight_t_3_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="capture_range_t_3_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="centroid_weight_t_3_predator" type="double">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="comms_range_t_3_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="max_pred_speed_t_3_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="max_speed_t_3_predator" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>

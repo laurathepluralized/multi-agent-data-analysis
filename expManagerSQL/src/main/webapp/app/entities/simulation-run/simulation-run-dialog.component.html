@@ -1,0 +1,260 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="mySimulationRunLabel">Create or edit a Simulation Run</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!simulationRun.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="simulationRun.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_simulationTrial">Simulation Trial</label>
+            <input type="text" class="form-control" name="simulationTrial" id="field_simulationTrial"
+                [(ngModel)]="simulationRun.simulationTrial" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_index">Index</label>
+            <input type="number" class="form-control" name="index" id="field_index"
+                [(ngModel)]="simulationRun.index" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_team_id">Team Id</label>
+            <input type="number" class="form-control" name="team_id" id="field_team_id"
+                [(ngModel)]="simulationRun.team_id" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_score">Score</label>
+            <input type="number" class="form-control" name="score" id="field_score"
+                [(ngModel)]="simulationRun.score" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_teamCapture">Team Capture</label>
+            <input type="number" class="form-control" name="teamCapture" id="field_teamCapture"
+                [(ngModel)]="simulationRun.teamCapture" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_nonTeamCapture">Non Team Capture</label>
+            <input type="number" class="form-control" name="nonTeamCapture" id="field_nonTeamCapture"
+                [(ngModel)]="simulationRun.nonTeamCapture" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_job_num">Job Num</label>
+            <input type="number" class="form-control" name="job_num" id="field_job_num"
+                [(ngModel)]="simulationRun.job_num" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_task_num">Task Num</label>
+            <input type="number" class="form-control" name="task_num" id="field_task_num"
+                [(ngModel)]="simulationRun.task_num" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_results_dir">Results Dir</label>
+            <input type="text" class="form-control" name="results_dir" id="field_results_dir"
+                [(ngModel)]="simulationRun.results_dir" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_num_rows">Num Rows</label>
+            <input type="number" class="form-control" name="num_rows" id="field_num_rows"
+                [(ngModel)]="simulationRun.num_rows" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_align_weight_t_1">Align Weight T 1</label>
+            <input type="number" class="form-control" name="align_weight_t_1" id="field_align_weight_t_1"
+                [(ngModel)]="simulationRun.align_weight_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_avoid_nonteam_weight_t_1">Avoid Nonteam Weight T 1</label>
+            <input type="number" class="form-control" name="avoid_nonteam_weight_t_1" id="field_avoid_nonteam_weight_t_1"
+                [(ngModel)]="simulationRun.avoid_nonteam_weight_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_avoid_team_weight_t_1">Avoid Team Weight T 1</label>
+            <input type="number" class="form-control" name="avoid_team_weight_t_1" id="field_avoid_team_weight_t_1"
+                [(ngModel)]="simulationRun.avoid_team_weight_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_centroid_weight_t_1">Centroid Weight T 1</label>
+            <input type="number" class="form-control" name="centroid_weight_t_1" id="field_centroid_weight_t_1"
+                [(ngModel)]="simulationRun.centroid_weight_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_comms_range_t_1">Comms Range T 1</label>
+            <input type="number" class="form-control" name="comms_range_t_1" id="field_comms_range_t_1"
+                [(ngModel)]="simulationRun.comms_range_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_fov_az_t_1">Fov Az T 1</label>
+            <input type="number" class="form-control" name="fov_az_t_1" id="field_fov_az_t_1"
+                [(ngModel)]="simulationRun.fov_az_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_fov_el_t_1">Fov El T 1</label>
+            <input type="number" class="form-control" name="fov_el_t_1" id="field_fov_el_t_1"
+                [(ngModel)]="simulationRun.fov_el_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_goal_weight_t_1">Goal Weight T 1</label>
+            <input type="number" class="form-control" name="goal_weight_t_1" id="field_goal_weight_t_1"
+                [(ngModel)]="simulationRun.goal_weight_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_max_pred_speed_t_1">Max Pred Speed T 1</label>
+            <input type="number" class="form-control" name="max_pred_speed_t_1" id="field_max_pred_speed_t_1"
+                [(ngModel)]="simulationRun.max_pred_speed_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_max_speed_t_1">Max Speed T 1</label>
+            <input type="number" class="form-control" name="max_speed_t_1" id="field_max_speed_t_1"
+                [(ngModel)]="simulationRun.max_speed_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_sphere_of_influence_t_1">Sphere Of Influence T 1</label>
+            <input type="number" class="form-control" name="sphere_of_influence_t_1" id="field_sphere_of_influence_t_1"
+                [(ngModel)]="simulationRun.sphere_of_influence_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_motion_model_t_1">Motion Model T 1</label>
+            <input type="text" class="form-control" name="motion_model_t_1" id="field_motion_model_t_1"
+                [(ngModel)]="simulationRun.motion_model_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_vel_max_t_1">Vel Max T 1</label>
+            <input type="number" class="form-control" name="vel_max_t_1" id="field_vel_max_t_1"
+                [(ngModel)]="simulationRun.vel_max_t_1" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_motion_model_predator">Motion Model Predator</label>
+            <input type="text" class="form-control" name="motion_model_predator" id="field_motion_model_predator"
+                [(ngModel)]="simulationRun.motion_model_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_pitch_rate_max_predator">Pitch Rate Max Predator</label>
+            <input type="number" class="form-control" name="pitch_rate_max_predator" id="field_pitch_rate_max_predator"
+                [(ngModel)]="simulationRun.pitch_rate_max_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_turn_rate_max_predator">Turn Rate Max Predator</label>
+            <input type="number" class="form-control" name="turn_rate_max_predator" id="field_turn_rate_max_predator"
+                [(ngModel)]="simulationRun.turn_rate_max_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_vel_max_predator">Vel Max Predator</label>
+            <input type="number" class="form-control" name="vel_max_predator" id="field_vel_max_predator"
+                [(ngModel)]="simulationRun.vel_max_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_align_weight_t_2_predator">Align Weight T 2 Predator</label>
+            <input type="number" class="form-control" name="align_weight_t_2_predator" id="field_align_weight_t_2_predator"
+                [(ngModel)]="simulationRun.align_weight_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_allow_prey_switching_t_2_predator">Allow Prey Switching T 2 Predator</label>
+            <input type="checkbox" class="form-control" name="allow_prey_switching_t_2_predator" id="field_allow_prey_switching_t_2_predator"
+                [(ngModel)]="simulationRun.allow_prey_switching_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_autonomy_t_2_predator">Autonomy T 2 Predator</label>
+            <input type="text" class="form-control" name="autonomy_t_2_predator" id="field_autonomy_t_2_predator"
+                [(ngModel)]="simulationRun.autonomy_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_avoid_nonteam_weight_t_2_predator">Avoid Nonteam Weight T 2 Predator</label>
+            <input type="number" class="form-control" name="avoid_nonteam_weight_t_2_predator" id="field_avoid_nonteam_weight_t_2_predator"
+                [(ngModel)]="simulationRun.avoid_nonteam_weight_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_avoid_team_weight_t_2_predator">Avoid Team Weight T 2 Predator</label>
+            <input type="number" class="form-control" name="avoid_team_weight_t_2_predator" id="field_avoid_team_weight_t_2_predator"
+                [(ngModel)]="simulationRun.avoid_team_weight_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_capture_range_t_2_predator">Capture Range T 2 Predator</label>
+            <input type="number" class="form-control" name="capture_range_t_2_predator" id="field_capture_range_t_2_predator"
+                [(ngModel)]="simulationRun.capture_range_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_centroid_weight_t_2_predator">Centroid Weight T 2 Predator</label>
+            <input type="number" class="form-control" name="centroid_weight_t_2_predator" id="field_centroid_weight_t_2_predator"
+                [(ngModel)]="simulationRun.centroid_weight_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_comms_range_t_2_predator">Comms Range T 2 Predator</label>
+            <input type="number" class="form-control" name="comms_range_t_2_predator" id="field_comms_range_t_2_predator"
+                [(ngModel)]="simulationRun.comms_range_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_max_pred_speed_t_2_predator">Max Pred Speed T 2 Predator</label>
+            <input type="number" class="form-control" name="max_pred_speed_t_2_predator" id="field_max_pred_speed_t_2_predator"
+                [(ngModel)]="simulationRun.max_pred_speed_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_max_speed_t_2_predator">Max Speed T 2 Predator</label>
+            <input type="number" class="form-control" name="max_speed_t_2_predator" id="field_max_speed_t_2_predator"
+                [(ngModel)]="simulationRun.max_speed_t_2_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_align_weight_t_3_predator">Align Weight T 3 Predator</label>
+            <input type="number" class="form-control" name="align_weight_t_3_predator" id="field_align_weight_t_3_predator"
+                [(ngModel)]="simulationRun.align_weight_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_allow_prey_switching_t_3_predator">Allow Prey Switching T 3 Predator</label>
+            <input type="checkbox" class="form-control" name="allow_prey_switching_t_3_predator" id="field_allow_prey_switching_t_3_predator"
+                [(ngModel)]="simulationRun.allow_prey_switching_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_autonomy_t_3_predator">Autonomy T 3 Predator</label>
+            <input type="text" class="form-control" name="autonomy_t_3_predator" id="field_autonomy_t_3_predator"
+                [(ngModel)]="simulationRun.autonomy_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_avoid_nonteam_weight_t_3_predator">Avoid Nonteam Weight T 3 Predator</label>
+            <input type="number" class="form-control" name="avoid_nonteam_weight_t_3_predator" id="field_avoid_nonteam_weight_t_3_predator"
+                [(ngModel)]="simulationRun.avoid_nonteam_weight_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_avoid_team_weight_t_3_predator">Avoid Team Weight T 3 Predator</label>
+            <input type="number" class="form-control" name="avoid_team_weight_t_3_predator" id="field_avoid_team_weight_t_3_predator"
+                [(ngModel)]="simulationRun.avoid_team_weight_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_capture_range_t_3_predator">Capture Range T 3 Predator</label>
+            <input type="number" class="form-control" name="capture_range_t_3_predator" id="field_capture_range_t_3_predator"
+                [(ngModel)]="simulationRun.capture_range_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_centroid_weight_t_3_predator">Centroid Weight T 3 Predator</label>
+            <input type="number" class="form-control" name="centroid_weight_t_3_predator" id="field_centroid_weight_t_3_predator"
+                [(ngModel)]="simulationRun.centroid_weight_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_comms_range_t_3_predator">Comms Range T 3 Predator</label>
+            <input type="number" class="form-control" name="comms_range_t_3_predator" id="field_comms_range_t_3_predator"
+                [(ngModel)]="simulationRun.comms_range_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_max_pred_speed_t_3_predator">Max Pred Speed T 3 Predator</label>
+            <input type="number" class="form-control" name="max_pred_speed_t_3_predator" id="field_max_pred_speed_t_3_predator"
+                [(ngModel)]="simulationRun.max_pred_speed_t_3_predator" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_max_speed_t_3_predator">Max Speed T 3 Predator</label>
+            <input type="number" class="form-control" name="max_speed_t_3_predator" id="field_max_speed_t_3_predator"
+                [(ngModel)]="simulationRun.max_speed_t_3_predator" />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
