@@ -51,4 +51,11 @@ def authenticate(userName, password, serverDomain):
     )
     return authCall;
 
-loadCsv();
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("csvFile", help="The CSV file to load.")
+    args = parser.parse_args()
+    loadCsv(args.csvFile)
+
+if __name__ == "__main__":
+    main()
