@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="http://gtri.gatech.edu"?>
+<runscript xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           name="Predator Prey Mission with Boids">
+
+  <run start="0.0" end="500" dt="0.1"
+       time_warp="0"
+       enable_gui="false"
+       network_gui="false"
+       start_paused="false"/>
+
+  <end_condition>time, one_team, all_dead</end_condition> <!-- time, one_team, none-->
+
+  <grid_spacing>100</grid_spacing>
+  <grid_size>10000</grid_size>
+
+  <!--<terrain>mcmillan</terrain>-->
+  <background_color>191 191 191</background_color> <!-- Red Green Blue -->
+  <gui_update_period>10</gui_update_period> <!-- milliseconds -->
+
+  <plot_tracks>false</plot_tracks>
+  <output_type>all</output_type>
+  <show_plugins>false</show_plugins>
+
+  <log_dir>~/.scrimmage/logs</log_dir>
+  <create_latest_dir>false</create_latest_dir>
+
+  <latitude_origin>35.721025</latitude_origin>
+  <longitude_origin>-120.767925</longitude_origin>
+  <altitude_origin>300</altitude_origin>
+  <show_origin>true</show_origin>
+  <origin_length>5</origin_length>
+  
+  <entity_interaction>SimpleCapture</entity_interaction>
+  <entity_interaction startup_collisions_only="true">SimpleCollision</entity_interaction>
+  
+  <metrics>SimpleCaptureMetrics</metrics>
+
+  <!-- Prey (Boids) (Team 1) -->
+  <entity>
+    <team_id>1</team_id>
+    <color>0 0 255</color>
+    <count>50</count>
+    <health>5</health>
+    <variance_x>200</variance_x>
+    <variance_y>200</variance_y>
+    <variance_z>100</variance_z>
+    <x>0</x>
+    <y>0</y>
+    <z>200</z>
+
+    <heading>0</heading>
+
+    <autonomy
+    max_speed="10"
+    fov_el="360"
+    fov_az="360"
+    comms_range="200"
+    goal_weight="0.1"
+    avoid_team_weight="1"
+    avoid_nonteam_weight="1"
+    centroid_weight="1"
+    align_weight="1"
+    sphere_of_influence="100"
+    >Boids</autonomy>
+
+    <motion_model vel_max="30">Unicycle</motion_model>
+    <controller>UnicycleControllerDirect</controller>
+    <visual_model>zephyr-blue</visual_model>
+  </entity>
+
+  <!-- Predators (Team 2) -->
+  <entity_common name="predator">
+    <count>5</count>
+    <health>5</health>
+    <variance_x>100</variance_x>
+    <variance_y>100</variance_y>
+    <variance_z>100</variance_z>
+
+    <x>1000</x>
+    <y>0</y>
+    <z>200</z>
+
+    <heading>180</heading>
+
+    <motion_model vel_max="35" turn_rate_max="2" pitch_rate_max="1.5">Unicycle</motion_model>
+    <controller>UnicycleControllerDirect</controller>
+    <visual_model>zephyr-red</visual_model>
+  </entity_common>
+
+  <entity entity_common="predator">
+    <team_id>2</team_id>
+    <color>255 0 0</color>
+    <autonomy capture_range="5" max_pred_speed="35" allow_prey_switching="true">PredatorUnique</autonomy>
+  </entity>
+
+  <!--
+  <entity entity_common="predator">
+    <team_id>3</team_id>
+    <color>0 255 0</color>
+    <autonomy capture_range="5" max_pred_speed="35" allow_prey_switching="false">PredatorUnique</autonomy>
+  </entity>
+  -->
+
+</runscript>
