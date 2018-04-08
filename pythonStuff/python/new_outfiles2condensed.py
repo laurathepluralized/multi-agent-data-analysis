@@ -30,95 +30,77 @@ def glob2df(datadir):
     thepaths = glob.iglob(datadir + '/*/')
 
     df_list = []
-
+    progress_counter = 100;
     counter = 0;
     # for filename, missionname in zip(sorted(data_files), sorted(mission_files)):
     for dirname in sorted(thepaths):
+        dirstructure = dirname.split('/')
+        lastdir = dirstructure[-1]
+        if '_job_' not in lastdir:
+            # handle trailing slash if present
+            lastdir = dirstructure[-2];
 
-        counter += 1;
-        if counter > 10:
-            print('...')
-            counter = 0;
-        # print('Results directory: ', dirname)
-        
-        if dirname.endswith('latest/'):
-            # print('skipping latest directory to avoid duplicate records')
+        if '_job_' not in lastdir:
+            # something's wrong; skip this case
             continue;
 
-        summary_exists = False
+        if '_task_' not in lastdir:
+            # something's wrong; skip this case
+            continue;
+
+        if 'latest' in lastdir:
+            continue;
+
         filename = dirname + 'summary.csv'
-        if os.path.isfile(filename):
-            summary_exists = True
-        else:
+        if not os.path.isfile(filename):
             print('No summary file at ', filename);
             # no summary file means no results, unless results saved using a 
             # different mechanism, which is out of scope of this script
             continue;
 
         missionname = dirname + 'mission.xml'
-        mission_exists = False
-        if os.path.isfile(missionname):
-            mission_exists = True
-        else:
+        if not os.path.isfile(missionname):
             print('No mission file at ', missionname);
-
-        # if this doesn't contain mission.xml and doesn't contain summary.csv,
-        # don't put it in our data
-        if not mission_exists and not summary_exists:
-            # print('Skipping directory ', dirname)
             continue;
 
-        try:
-            jobnumpart = dirname.split('_job_',1)[1]
-            jobnum = jobnumpart.split('_task',1)[0]
-        except:
-            jobnum = -1
-            print('Job number not found; using -1')
-            pass;
 
-        try:
-            tasknumpart = dirname.split('_task_',1)[1]
-            try:
-                # remove trailing slash
-                tasknum = tasknumpart.split('/',1)[0]
-            except:
-                # apparently no trailing slash?
-                pass;
-        except:
-            tasknum = -1
-            print('Task number not found; using -1')
-            pass;
+        split_on_task = lastdir.split('_task_')
+        tasknum = int(split_on_task[-1])
 
+        jobnum = int(split_on_task[0].split('_job_',1)[1])
 
-        thisjob_df = pd.DataFrame(index=range(1))
-        if summary_exists:
-            thisjob_df = pd.read_csv(filename)
-        else:
-            print('No summary.csv at location ', filename, '; team_id will', \
-                    ' be -1 in resulting df')
-            thisjob_df['team_id'] = -1
+        counter += 1;
+        if counter > progress_counter:
+            print('j ', jobnum, ', t ', tasknum)
+            counter = 0;
+
+        # thisjob_df = pd.DataFrame(index=range(1))
+        thisjob_df = pd.read_csv(filename)
+
+        if thisjob_df.empty:
+            # no actual content in df; maybe only header rows
+            continue;
 
         # Add column to df for job number
         thisjob_df['job_num']=jobnum
         # and task number
         thisjob_df['task_num']=tasknum
         # and results directory
-        thisjob_df['results_dir']=dirname
+        thisjob_df['results_dir']=lastdir
         # add how many rows there are in the df so plot scripts know what to 
         # expect
         thisjob_df['num_rows']=len(thisjob_df.index)
 
         df_to_append = pd.DataFrame()
 
-        if mission_exists:
-            thisjob_params_df = xml_param_df_cols(missionname);
-            num_lines = len(thisjob_df.index)
-            if num_lines < 1:
-                num_lines = 1;
-            df_to_append = pd.concat([thisjob_params_df]*num_lines, ignore_index=True);
-        else:
-            print('No mission.xml at location ', missionname, \
-                '; not including mission params')
+        thisjob_params_df = xml_param_df_cols(missionname);
+        num_lines = len(thisjob_df.index)
+        if num_lines < 1:
+            num_lines = 1;
+        df_to_append = pd.concat([thisjob_params_df]*num_lines, ignore_index=True);
+
+        if df_to_append.empty:
+            continue;
 
         this_job_df = thisjob_df
         if not df_to_append.empty:
@@ -135,10 +117,10 @@ def glob2df(datadir):
     return df;
 
 
-def append_block(theblock, block_name_string, none_type_var):
+def append_block(theblock, blk_name, nonetype_var):
     thedf = pd.DataFrame()
 
-    if type(theblock) is not type(none_type_var):
+    if type(theblock) is not type(nonetype_var):
         thedict = {}
         try:
             thedict = theblock.attrib
@@ -147,9 +129,9 @@ def append_block(theblock, block_name_string, none_type_var):
 
         if thedict:
             try:
-                thedict[block_name_string] = theblock.text
+                thedict[blk_name] = theblock.text
             except:
-                print('block has no name:', block_name_string)
+                print('block has no name:', blk_name)
                 pass;
 
             thedf = thedf.from_records([thedict])
@@ -179,8 +161,8 @@ def xml_param_df_cols(mission_file_name):
         # add the tag name, plugin name, and team number (where applicable) to
         # a Pandas DF column name, and then set the value for that column to be
         # what the param was during simulation as defined by the mission file.
-        if child.tag != 'entity_common' and child.tag != 'entity':
-            continue
+        # if child.tag != 'entity_common' and child.tag != 'entity':
+        #     continue
 
         if child.tag == "entity_common" or child.tag == "entity":
             ent_common_type = None
@@ -202,16 +184,15 @@ def xml_param_df_cols(mission_file_name):
             teamint = int(theteam)
 
             entdf = pd.DataFrame()
+            toappend = ''
             if (teamint != 0):
                 if (theteam in team_keys):
                     team_keys.append(theteam + 'a')
                 else:
                     team_keys.append(theteam)
                 key_idx += 1;
-
-            toappend = ''
-            if (teamint != 0):
                 toappend += '_t_' + team_keys[key_idx]
+
             if ent_common_type is not None:
                 try:
                     toappend += '_' + ent_common_type
@@ -254,20 +235,16 @@ def xml_param_df_cols(mission_file_name):
                     colmap[col] = col + toappend
                 entdf.rename(index=str, columns=colmap, inplace=True)
 
-
-        if (big_df_params.empty):
-            big_df_params = entdf
-        else:
-            big_df_params = big_df_params.join(entdf, sort=False)
+            if (big_df_params.empty):
+                big_df_params = entdf
+            else:
+                big_df_params = big_df_params.join(entdf, sort=False)
 
     # Return a df of all modified attributes of all teams, with team number 
     # suffixes and/or entity_common attributes in column names
     if big_df_params.empty:
         pdb.set_trace();
     return big_df_params;
-
-
-
 
 
 def main ():
