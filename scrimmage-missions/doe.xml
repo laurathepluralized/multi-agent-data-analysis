@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="http://github.gatech.edu"?>
+<ranges xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"           
+    name="Predator Prey Parameters">
+
+    <!-- Unicycle Motion Model -->
+    <motion low="1.0"   high="5.0"  type="float" attribute="turn_rate_max"/>
+
+    <!-- Prey -->
+    <autonomy low="10"  high="50"   type="int"   attribute="max_speed"/>
+    <autonomy low="50"  high="1000" type="int"   attribute="comms_range"/>
+    <autonomy low="1.0" high="50.0" type="float" attribute="avoid_team_weight"/>
+    <autonomy low="1.0" high="50.0" type="float" attribute="avoid_nonteam_weight"/>
+    <autonomy low="1.0" high="50.0" type="float" attribute="centroid_weight"/>
+    <autonomy low="1.0" high="50.0" type="float" attribute="align_weight"/>
+
+    <!-- Predator -->
+    <autonomy low="10"  high="50"   type="int"   attribute="max_pred_speed"/>
+
+</ranges>
