@@ -25,12 +25,12 @@ def df_to_csv(thedf, thefilename):
 def df_to_json(thedf, thefilename):
     thedf.to_json(thefilename, orient='records', double_precision = 10, force_ascii = True);
 
-def glob2df(datadir):
+def glob2df(datadir, linecount):
     print(datadir)
     thepaths = glob.iglob(datadir + '/*/')
 
     df_list = []
-    progress_counter = 100;
+    progress_counter = 1000;
     counter = 0;
     # for filename, missionname in zip(sorted(data_files), sorted(mission_files)):
     for dirname in sorted(thepaths):
@@ -95,8 +95,9 @@ def glob2df(datadir):
 
         thisjob_params_df = xml_param_df_cols(missionname);
         num_lines = len(thisjob_df.index)
-        if num_lines < 1:
-            num_lines = 1;
+        if linecount > 0:
+            if num_lines < linecount:
+                continue;
         df_to_append = pd.concat([thisjob_params_df]*num_lines, ignore_index=True);
 
         if df_to_append.empty:
@@ -254,6 +255,9 @@ def main ():
     parser.add_argument('--filename', help='Put generated CSV and/or JSON in' \
             ' file with this name (relative to path argument)' \
             ' (please DO NOT include extension)')
+    parser.add_argument('-l', '--linecount', help='number of lines per case:' \
+            ' if not given, do not exclude cases if they have fewer than' \
+            ' a certain number of lines', type=int, default=-1)
     parser.add_argument('-c', '--csv', help='generate csv file at' \
             ' path/filename.csv', action='store_true')
     parser.add_argument('-j', '--json', help='generate json file at' \
@@ -268,6 +272,8 @@ def main ():
 
     picklename = args.path + '/' + args.filename + '.pickle'
 
+    linecount = args.linecount;
+
     # generate pickle if none exists or if args.repickle is set to true
     if not args.repickle:
         print('Looking for pickle file ', picklename)
@@ -277,13 +283,13 @@ def main ():
         except:
             print('No pickle found or error reading pickle. Generating new' \
             ' pickle.')
-            thedf = glob2df(args.path)
+            thedf = glob2df(args.path, linecount)
             thedf.reset_index(inplace=True, drop=True)
             df_to_pickle(thedf, picklename);
     else:
         print('Regenerating pickle file at ', picklename)
         # argument explicitly given to regenerate the pickle file
-        thedf = glob2df(args.path)
+        thedf = glob2df(args.path, linecount)
         thedf.reset_index(inplace=True, drop=True)
         df_to_pickle(thedf, picklename);
 
