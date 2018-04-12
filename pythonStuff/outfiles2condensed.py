@@ -256,7 +256,7 @@ def main ():
             ' file with this name (relative to path argument)' \
             ' (please DO NOT include extension)')
     parser.add_argument('-l', '--linecount', help='number of lines per case:' \
-            ' if not given, do not exclude cases if they have fewer than' \
+            ' if given, exclude cases if they have fewer than' \
             ' a certain number of lines', type=int, default=-1)
     parser.add_argument('-c', '--csv', help='generate csv file at' \
             ' path/filename.csv', action='store_true')
