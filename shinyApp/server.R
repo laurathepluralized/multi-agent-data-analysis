@@ -1,0 +1,145 @@
+#
+# This is the server logic of a Shiny web application. You can run the 
+# application by clicking 'Run App' above.
+#
+# Find out more about building applications with Shiny here:
+# 
+#    http://shiny.rstudio.com/
+#
+
+library(shiny)
+library(ggplot2)
+library(shinydashboard)
+library(scatterD3)
+
+
+server <- function(input, output, session) {
+  
+  ## output table for file contents (Main)
+  output$contents <- renderTable({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    df <- read.csv(input$file1$datapath,
+                   header = input$header,
+                   sep = input$sep,
+                   quote = input$quote)
+    
+    if(input$disp == "head") {
+      return(head(df))
+    }
+    else {
+      return(df)
+    }
+    
+  })
+  
+  ## output progress box increment (Main)
+  output$progressBox <- renderInfoBox({
+    infoBox(
+      "Progress", paste0(25 + input$count, "%"), icon = icon("list"),
+      color = "purple"
+    )
+  })
+  
+  ## output text message for sidebar selection
+  output$res <- renderText({
+    paste("You've selected:", input$tabs)
+  })
+  
+  ## output plot of histogram (Main)
+  set.seed(122)
+  histdata <- rnorm(500)
+  
+  output$plot1 <- renderPlot({
+    data <- histdata[seq_len(input$slider)]
+    hist(data)
+  })
+  
+  ## output plot for multi-robot simulation data (Widgets)
+  ## data for k-means cluster - dsim
+  selectedData <- reactive({
+    dsim[, c(input$xcol, input$ycol)]
+  })
+  
+  clusters <- reactive({
+    kmeans(selectedData(), input$clusters)
+  })
+  
+  output$plot2 <- renderPlot({
+    par(mar = c(5.1, 4.1, 0, 1))
+    plot(selectedData(),
+         col = clusters()$cluster,
+         pch = 20, cex = 3)
+    text(selectedData(), pos=1, labels = dsim$score)
+    points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+  })
+  
+  ## output text info box for plot click, hover etc. (Widgets)
+  output$info <- renderText({
+    xy_str <- function(e) {
+      if(is.null(e)) return("NULL\n")
+      paste0("x=", round(e$x, 1), " y=", round(e$y, 1), "\n")
+    }
+    xy_range_str <- function(e) {
+      if(is.null(e)) return("NULL\n")
+      paste0("xmin=", round(e$xmin, 1), " xmax=", round(e$xmax, 1), 
+             " ymin=", round(e$ymin, 1), " ymax=", round(e$ymax, 1))
+    }
+    
+    paste0(
+      "click: ", xy_str(input$plot_click),
+      "dblclick: ", xy_str(input$plot_dblclick),
+      "hover: ", xy_str(input$plot_hover),
+      "brush: ", xy_range_str(input$plot_brush)
+    )
+  })
+  
+  ## output for D3 scatter plot using mtcars data
+  data <- reactive({
+    d[1:input$scatterD3_nb,]
+  })
+  
+  lines <- reactive({
+    if (input$scatterD3_threshold_line) {
+      return(rbind(default_lines, threshold_line))
+    }
+    default_lines
+  })
+  
+  output$scatterPlot <- renderScatterD3({
+    col_var <- if (input$scatterD3_col == "None") NULL else data()[,input$scatterD3_col]
+    symbol_var <- if (input$scatterD3_symbol == "None") NULL else data()[,input$scatterD3_symbol]
+    size_var <- if (input$scatterD3_size == "None") NULL else data()[,input$scatterD3_size]
+    scatterD3(x = data()[,input$scatterD3_x],
+              y = data()[,input$scatterD3_y],
+              lab = data()[,"names"],
+              xlab = input$scatterD3_x,
+              ylab = input$scatterD3_y,
+              x_log = input$scatterD3_x_log,
+              y_log = input$scatterD3_y_log,
+              col_var = col_var,
+              col_lab = input$scatterD3_col,
+              ellipses = input$scatterD3_ellipses,
+              symbol_var = symbol_var,
+              symbol_lab = input$scatterD3_symbol,
+              size_var = size_var,
+              size_lab = input$scatterD3_size,
+              url_var = paste0("https://www.duckduckgo.com/?q=", rownames(data())),
+              key_var = rownames(data()),
+              point_opacity = input$scatterD3_opacity,
+              labels_size = input$scatterD3_labsize,
+              transitions = input$scatterD3_transitions,
+              left_margin = 90,
+              lines = lines(),
+              lasso = TRUE,
+              caption = list(title = "Sample scatterD3 shiny app",
+                             subtitle = "A sample application to show animated transitions",
+                             text = "Yep, you can even use <strong>markup</strong> in caption text. <em>Incredible</em>, isn't it ?"),
+              lasso_callback = "function(sel) {alert(sel.data().map(function(d) {return d.lab}).join('\\n'));}")
+  })
+}
