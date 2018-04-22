@@ -21,22 +21,6 @@ dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
 
-## mtcars data for sample scatter plot in D3
-d <- mtcars
-d$names <- rownames(mtcars)
-d$cyl_cat <- paste(d$cyl, "cylinders")
-
-default_lines <- data.frame(slope = c(0, Inf), 
-                            intercept = c(0, 0),
-                            stroke = "#000",
-                            stroke_width = 1,
-                            stroke_dasharray = c(5, 5))
-threshold_line <- data.frame(slope = 0, 
-                             intercept = 30, 
-                             stroke = "#F67E7D",
-                             stroke_width = 2,
-                             stroke_dasharray = "")
-
 ui <- dashboardPage(
   dashboardHeader(title="Multi-Robot Simulation Dashboard", titleWidth = 350),
   
@@ -81,6 +65,16 @@ ui <- dashboardPage(
                                        "text/comma-separated-values,text/plain",
                                        ".csv")),
                   
+                  #These column selectors are dynamically created when the file is loaded
+                  uiOutput("fromCol"),
+                  uiOutput("toCol"),
+                  uiOutput("amountflag"),
+                  #The conditional panel is triggered by the preceding checkbox
+                  conditionalPanel(
+                    condition="input.amountflag==true",
+                    uiOutput("amountCol")
+                  ),
+                  
                   # Horizontal line ----
                   tags$hr(),
                   
@@ -112,6 +106,9 @@ ui <- dashboardPage(
                 ),
                 box(
                   tableOutput("contents")
+                ),
+                box(
+                  tableOutput("filetable")
                 )
               ),
               fluidRow(
