@@ -14,6 +14,7 @@ library(scatterD3)
 source("analysis.R")
 
 options(shiny.maxRequestSize=500*1024^2)
+dsnames <- c()
 
 # Read CSV into R
 #dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
@@ -73,6 +74,16 @@ server <- function(input, output, session) {
     }
     read.csv(infile$datapath)
   })
+  observe({
+    req(input$file1)
+    dsnames <- names(filedata())
+    cb_options <- list()
+    cb_options[ dsnames] <- dsnames
+    updateCheckboxGroupInput(session, "inCheckboxGroup",
+                             label = "Check Box Group",
+                             choices = cb_options,
+                             selected = "")
+  })
   
   #The following set of functions populate the column selectors
   output$toCol <- renderUI({
@@ -124,24 +135,28 @@ server <- function(input, output, session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
+    if(input$runStability){
+      req(input$file1)
+      
+      df <- read.csv(input$file1$datapath,
+                     header = input$header,
+                     sep = input$sep,
+                     quote = input$quote)
+      
+      result_col <- input$result_col
+      numericCol <- c("vel_max.t.1",
+                      "vel_max.predator",
+                      "pitch_rate_max.predator",
+                      "turn_rate_max.predator")
+      categoryCol <- c("team_id",
+                       "allow_prey_switching.t.2.predator")
+      
+      stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
+      
+      return(stabilityResults)
+    }
     
-    df <- read.csv(input$file1$datapath,
-                   header = input$header,
-                   sep = input$sep,
-                   quote = input$quote)
-    
-    result_col <- input$result_col
-    numericCol <- c("vel_max.t.1",
-                    "vel_max.predator",
-                    "pitch_rate_max.predator",
-                    "turn_rate_max.predator")
-    categoryCol <- c("team_id",
-                     "allow_prey_switching.t.2.predator")
-    
-    stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
-    
-    return(stabilityResults)
+    return (c(0,0))
     }
     )
   
