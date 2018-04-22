@@ -14,6 +14,28 @@ library(scatterD3)
 
 options(shiny.maxRequestSize=500*1024^2)
 
+# Read CSV into R
+#dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
+dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+#recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
+#head(dsim)
+
+## mtcars data for sample scatter plot in D3
+d <- mtcars
+d$names <- rownames(mtcars)
+d$cyl_cat <- paste(d$cyl, "cylinders")
+
+default_lines <- data.frame(slope = c(0, Inf), 
+                            intercept = c(0, 0),
+                            stroke = "#000",
+                            stroke_width = 1,
+                            stroke_dasharray = c(5, 5))
+threshold_line <- data.frame(slope = 0, 
+                             intercept = 30, 
+                             stroke = "#F67E7D",
+                             stroke_width = 2,
+                             stroke_dasharray = "")
+
 server <- function(input, output, session) {
   
   ## output table for file contents (Main)
@@ -37,6 +59,62 @@ server <- function(input, output, session) {
       return(df)
     }
     
+  })
+  
+  #This function is repsonsible for loading in the selected file
+  filedata <- reactive({
+    req(input$file1)
+    infile <- input$file1
+    if (is.null(infile)) {
+      # User has not uploaded a file yet
+      return(NULL)
+    }
+    read.csv(infile$datapath)
+  })
+  
+  #The following set of functions populate the column selectors
+  output$toCol <- renderUI({
+    df <-filedata()
+    if (is.null(df)) return(NULL)
+    
+    items=names(df)
+    names(items)=items
+    selectInput("to", "To:",items)
+    
+  })
+  
+  output$fromCol <- renderUI({
+    df <-filedata()
+    if (is.null(df)) return(NULL)
+    
+    items=names(df)
+    names(items)=items
+    selectInput("from", "From:",items)
+    
+  })
+  
+  #The checkbox selector is used to determine whether we want an optional column
+  output$amountflag <- renderUI({
+    df <-filedata()
+    if (is.null(df)) return(NULL)
+    
+    checkboxInput("amountflag", "Use values?", FALSE)
+  })
+  
+  #If we do want the optional column, this is where it gets created
+  output$amountCol <- renderUI({
+    df <-filedata()
+    if (is.null(df)) return(NULL)
+    #Let's only show numeric columns
+    nums <- sapply(df, is.numeric)
+    items=names(nums[nums])
+    names(items)=items
+    selectInput("amount", "Amount:",items)
+  })
+  
+  #This previews the CSV data file
+  output$filetable <- renderTable({
+    filedata()
   })
   
   ## output progress box increment (Main)

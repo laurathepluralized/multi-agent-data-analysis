@@ -5,9 +5,9 @@ account: cse6242project
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 327499
-bundleId: 1331158
+bundleId: 1332407
 url: https://cse6242project.shinyapps.io/appviz/
-when: 1524342431.55676
+when: 1524432265.44751
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: data/.DS_Store
