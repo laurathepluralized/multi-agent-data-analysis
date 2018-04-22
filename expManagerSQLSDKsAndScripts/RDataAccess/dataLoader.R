@@ -4,7 +4,6 @@ getData <- function(serverDomain, path, params, authCall) {
   dataCall <- GET(url = paste(serverDomain, path, sep=""),
                   add_headers('X-XSRF-TOKEN' = cookies(authCall)[1,'value']),
                   query = params,
-                  verbose()
                   )
   return(dataCall)
 }
