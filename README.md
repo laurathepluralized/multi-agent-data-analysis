@@ -26,12 +26,17 @@ The Shiny application uses the following R libraries:
 * shinydashboard
 * ggplot2
 * scatterD3
+* data.table
+* sqldf
+* dplyr
+* readxl
+* corrplot
 
 To install these dependencies, after installing R, execute the following at
 the command line:
 
     $ R
-    > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3"))
+    > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3", "data.table", "sqldf", "dplyr", "readxl", "corrplot"))
 
 
 
