@@ -2,6 +2,7 @@
 
 import csv
 import argparse
+import pandas
 from authentication import *
 
 #params
@@ -11,6 +12,7 @@ password = 'admin'
 
 def loadCsv(csvFilePath):
     authRes = authenticate(user,password,serverDomain)
+    df = pandas.read_csv('/home/hubert/Documents/CX4242/project/alldataFirst20.csv')
     with open(csvFilePath, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -18,6 +20,7 @@ def loadCsv(csvFilePath):
             simulationRun = {
                 'index': row['index'],
                 'nonTeamCapture': int(float(row['NonTeamCapture'].strip() or 0))
+                'teamId'
             }
             authorizedPost(serverDomain, '/api/simulation-runs', {}, simulationRun, authRes)
 
