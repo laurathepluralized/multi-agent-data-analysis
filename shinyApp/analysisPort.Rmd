@@ -137,33 +137,12 @@ data <- data1
 #data2 <- join(x=data, y =totalCapture_temp, by= "task_num", type="left",match="first")
 
 #######First provide column name if want to. name the response variable(y) as result
-names(data)<-c("team_id",
-"TeamCapture",
-"NonTeamCapture",
-"job_num",
-"task_num",
-"results_dir",
-"num_rows",
-"align_weight_t_1",
-"avoid_nonteam_weight_t_1",
-"avoid_team_weight_t_1",
-"centroid_weight_t_1",
-"comms_range_t_1",
-"fov_az_t_1",
-"fov_el_t_1",
-"goal_weight_t_1",
-"max_speed_t_1",
-"sphere_of_influence_t_1",
-"vel_max_t_1",
-"pitch_rate_max_predator",
-"turn_rate_max_predator",
-"vel_max_predator",
-"allow_prey_switching_t_2_predator",
-"capture_range_t_2_predator",
-"max_pred_speed_t_2_predator",
-"allow_prey_switching_t_3_predator",
-"capture_range_t_3_predator",
-"max_pred_speed_t_3_predator") 
+# names(data)<-c("NonTeamCapture","vel_max.t.1",
+#                     "vel_max.predator",
+#                     "pitch_rate_max.predator",
+#                     "turn_rate_max.predator",
+#                "team_id",
+#                      "allow_prey_switching.t.2.predator")
 
 # data_temp <- sqldf("Select * from data WHERE num_rows > 1")
 # data_temp <- sqldf("Select task_num, Sum(result) from data_temp GROUP BY task_num")
@@ -177,29 +156,14 @@ names(data)<-c("team_id",
 colnames(data)[colnames(data) == 'NonTeamCapture'] <- 'result'
 
 ########provide column names of meaningful numeric variables
-numericCol <- c("align_weight_t_1",
-"avoid_nonteam_weight_t_1",
-"avoid_team_weight_t_1",
-"centroid_weight_t_1",
-"comms_range_t_1",
-"fov_az_t_1",
-"fov_el_t_1",
-"goal_weight_t_1",
-"max_speed_t_1",
-"sphere_of_influence_t_1",
-"vel_max_t_1",
-"pitch_rate_max_predator",
-"turn_rate_max_predator",
-"vel_max_predator",
-"capture_range_t_2_predator",
-"max_pred_speed_t_2_predator",
-"capture_range_t_3_predator",
-"max_pred_speed_t_3_predator")
+numericCol <- c("vel_max.t.1",
+                    "vel_max.predator",
+                    "pitch_rate_max.predator",
+                    "turn_rate_max.predator")
 
 ########provide column names of meaningful category variables
 categoryCol <- c("team_id",
-"allow_prey_switching_t_2_predator",
-"allow_prey_switching_t_3_predator")
+                     "allow_prey_switching.t.2.predator")
 
 ##read useful varaibles only (specified above)
 mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
