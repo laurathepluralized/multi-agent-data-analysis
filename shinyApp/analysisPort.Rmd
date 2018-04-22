@@ -36,6 +36,7 @@ colnames(data2)[colnames(data2) == result_col] <- 'result'
 data <- data2
 
 dataTypes <- sapply(data, class)
+resultCol <- data['result']
 
 # Variables varied: {values they had}
 # max_speed_t_1 = vel_max_t_1: {40 50}
@@ -46,16 +47,16 @@ dataTypes <- sapply(data, class)
 # 180 combinations
 
 ########provide column names of numeric variables
-# numericCol <- c("vel_max_t_1",
-# "vel_max_predator",
-# "turn_rate_max_t_1",
-# "turn_rate_max_predator")
-numericCol <- colnames(data[sapply(data, is.numeric)])
+numericCol <- c("vel_max.t.1",
+"vel_max.predator",
+"pitch_rate_max.predator",
+"turn_rate_max.predator")
+# numericCol <- colnames(data[sapply(data, is.numeric)])
 
 ########provide column names of category variables
-# categoryCol <- c("team_id",
-# "allow_prey_switching_t_2_predator")
-categoryCol <- colnames(data[!sapply(data, is.numeric)])
+categoryCol <- c("team_id",
+"allow_prey_switching.t.2.predator")
+# categoryCol <- 
 
 ##read useful varaibles only (specified above)
 mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
@@ -63,8 +64,8 @@ colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
 
 ##Clean missing data
 mydata <- na.omit(mydata)
-mydataOriginal <- mydata
-mydata <- mydata[mydata$team_id > 1,]
+#mydataOriginal <- mydata
+#mydata <- mydata[mydata$team_id > 1,]
 
 lastCol = length(mydata[1])
 for(i in 1:length(mydata$result)){
@@ -85,6 +86,7 @@ stabilityTable2 <- ddply(mydata, cbind(numericCol, categoryCol), summarise,
                sd   = sd(result),
                cov   = sd(result) / mean(result)  )
 stabilityTable2[order(stabilityTable2$cov),]
+
 
 # # Set a different color for each group
 # ggplot(mydata, aes(x=predictors, y=result, fill=predictors)) + 
@@ -121,8 +123,8 @@ library(corrplot)
 ######### Here meet must be customized by case ###################################################################################
 ######### set working directory to where your data is
 #setwd("D:/CSE_project")
-setwd("~/Desktop/cse")
-data1 <- read.csv('finalData.csv')
+#setwd("~/Desktop/cse")
+data1 <- read.csv('./data/alldata2.csv')
 data <- data1
 #attach(data)
 #hist(NonTeamCapture)
@@ -174,7 +176,7 @@ names(data)<-c("team_id",
 ##specify response variable (y) and name it result
 colnames(data)[colnames(data) == 'NonTeamCapture'] <- 'result'
 
-########provide column names of numeric variables
+########provide column names of meaningful numeric variables
 numericCol <- c("align_weight_t_1",
 "avoid_nonteam_weight_t_1",
 "avoid_team_weight_t_1",
@@ -194,7 +196,7 @@ numericCol <- c("align_weight_t_1",
 "capture_range_t_3_predator",
 "max_pred_speed_t_3_predator")
 
-########provide column names of category variables
+########provide column names of meaningful category variables
 categoryCol <- c("team_id",
 "allow_prey_switching_t_2_predator",
 "allow_prey_switching_t_3_predator")
@@ -297,7 +299,7 @@ corrplot(Corr, method="circle")
 ```{r}
 # Choose the models
 # 1. Multivariate linear regression
-# 2. Linear regression with AIC
+# 2. Linear regression with backward elimination
 # 3. Principal component regresson(using PCA)
 # 4. Partial least squares
 # 5. Random Forest Regression
