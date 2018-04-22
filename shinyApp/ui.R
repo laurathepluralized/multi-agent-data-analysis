@@ -18,6 +18,7 @@ library(scatterD3)
 # Read CSV into R
 #dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
 dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
 
@@ -102,7 +103,14 @@ ui <- dashboardPage(
                   radioButtons("disp", "Display",
                                choices = c(Head = "head",
                                            All = "all"),
-                               selected = "head")
+                               selected = "head"),
+                  checkboxGroupInput("inCheckboxGroup",
+                                     "Checkbox group input:",
+                                     c("label 1" = "option1",
+                                       "label 2" = "option2")),
+                  uiOutput("choose_columns")
+                  
+                  
                 ),
                 box(
                   tableOutput("contents")
