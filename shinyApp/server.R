@@ -11,6 +11,7 @@ library(shiny)
 library(ggplot2)
 library(shinydashboard)
 library(scatterD3)
+source("analysis.R")
 
 options(shiny.maxRequestSize=500*1024^2)
 
@@ -30,6 +31,7 @@ server <- function(input, output, session) {
                    sep = input$sep,
                    quote = input$quote)
     
+    
     if(input$disp == "head") {
       return(head(df))
     }
@@ -37,6 +39,31 @@ server <- function(input, output, session) {
       return(df)
     }
     
+  })
+  
+  output$stabilityAnalysis <- renderTable({
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    df <- read.csv(input$file1$datapath,
+                   header = input$header,
+                   sep = input$sep,
+                   quote = input$quote)
+    
+    result_col <- input$result_col
+    numericCol <- c("vel_max.t.1",
+                    "vel_max.predator",
+                    "pitch_rate_max.predator",
+                    "turn_rate_max.predator")
+    categoryCol <- c("team_id",
+                     "allow_prey_switching.t.2.predator")
+    
+    stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
+    
+    return(stabilityResults)
   })
   
   ## output progress box increment (Main)

@@ -113,6 +113,14 @@ ui <- dashboardPage(
                 box(
                   tableOutput("contents")
                 )
+              ),
+              fluidRow(
+                h2("Stability Analysis"),
+                box(
+                  tableOutput("stabilityAnalysis"),
+                  width = 12
+                )
+                
               )
       ),
       
