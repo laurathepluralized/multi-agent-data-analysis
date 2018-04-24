@@ -10,7 +10,6 @@ library(dplyr)
 
 #options(shiny.maxRequestSize=1000*1024^2)
 dsimcsv <- read.csv('./../shinyApp/data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
-browser()
 dsimcsv <- dsimcsv[dsimcsv$team_id!=1,]  # our metrics for this data only involve team 2
 storefile <- file.path('./', 'data.rds')
 saveRDS(dsimcsv, file = storefile)
@@ -44,8 +43,12 @@ server <- function(input, output, session) {
 
     output$sliders <- renderUI({
         sliders <- lapply(1:length(paramcols), function(i) {
-            inname <- paramcols[i]
-            sliderInput(inname, inname, min=10, max=50, value=25, post="%")
+            thevals <- dsim[paramcols[i]]
+            inname <- names(thevals)
+            if (inname != input$theparamx) {
+                # only make a slider if this isn't the x-axis variable
+                sliderInput(inname, inname, min=0, max=50, value=25, post="%")
+            }
         })
         do.call(tagList, sliders)
     })
