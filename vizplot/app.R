@@ -9,15 +9,19 @@ library(ggplot2)
 library(dplyr)
 
 #options(shiny.maxRequestSize=1000*1024^2)
-dsimcsv <- read.csv('./../shinyApp/data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+dsimcsv <- read.csv('./../shinyApp/data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
+browser()
+dsimcsv <- dsimcsv[dsimcsv$team_id!=1,]  # our metrics for this data only involve team 2
 storefile <- file.path('./', 'data.rds')
 saveRDS(dsimcsv, file = storefile)
 dsim <- readRDS(storefile)
-paramcols <- c('avoid_nonteam_weight_t_1','avoid_team_weight_t_1', 'max_speed_t_1', 'max_pred_speed_t_2_predator')
+paramcols <- c('max_speed_t_1','turn_rate_max_t_1','turn_rate_max_predator','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
 
-# Given the x and y param and metric we want to plot, and a list containing the the other params and values that they are fixed at to plot, plot only the rows in which all of the other params are at those fixed values
+# Given the x and y param and metric we want to plot, and a list containing
+# the the other params and values that they are fixed at to plot, plot only
+# the rows in which all of the other params are at those fixed values
 
 
 ui <- fluidPage(
