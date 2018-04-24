@@ -15,6 +15,10 @@ dsim <- readRDS(storefile)
 paramcols <- c('avoid_nonteam_weight_t_1','avoid_team_weight_t_1', 'max_speed_t_1', 'max_pred_speed_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
+
+# Given the x and y param and metric we want to plot, and a list containing the the other params and values that they are fixed at to plot, plot only the rows in which all of the other params are at those fixed values
+
+
 ui <- fluidPage(
     selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
     selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols])),
@@ -24,9 +28,12 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
 
+    #a <- 1
+    #b <- 10
     mydata <- reactive({
         dsim[, c(input$theparamx, input$themetricy)]
     })
+
 
     output$plot1 <- renderPlot({
         plot(mydata())
@@ -34,8 +41,15 @@ server <- function(input, output, session) {
 
     output$info <- renderPrint({
         # With base graphics, need to tell it what the x and y variables are.
-        brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)[1:10,]
+        # Max of 10, otherwise we overload the user
+        points <- brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
+        if (nrow(points) >= 10) {
+            points[0:10,]
+        } else {
+            points
+        }
     })
+    #output$info <- renderPrint(a)
 
 }
 
