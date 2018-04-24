@@ -17,8 +17,8 @@ options(shiny.maxRequestSize=500*1024^2)
 dsnames <- c()
 
 # Read CSV into R
-#dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
-dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+#dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
+dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
 

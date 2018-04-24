@@ -16,8 +16,8 @@ library(shinydashboard)
 library(scatterD3)
 
 # Read CSV into R
-#dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
-dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+#dsim <- read.csv(file="data/betterdata2.csv", header=TRUE, sep=",")
+dsim <- read.csv('data/betterdata2.csv', stringsAsFactors = FALSE, header=TRUE)
 
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
