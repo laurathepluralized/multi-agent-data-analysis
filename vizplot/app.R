@@ -26,8 +26,18 @@ ui <- fluidPage(
     verbatimTextOutput("info")
 )
 
-server <- function(input, output, session) {
 
+server <- function(input, output, session) {
+    
+    variables = reactiveValues(not_to_plot_params = c())
+
+    observeEvent(input$theparamx, {
+        variables$not_to_plot_params = paramcols[paramcols != input$theparamx]
+    })
+
+    #reactive({not_to_plot_params <- paramcols[paramcols != input$theparamx]})
+
+    #print(variables$not_to_plot_params)
     #a <- 1
     #b <- 10
     mydata <- reactive({
@@ -44,12 +54,14 @@ server <- function(input, output, session) {
         # Max of 10, otherwise we overload the user
         points <- brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
         if (nrow(points) >= 10) {
-            points[0:10,]
+            points[1:10,]
         } else {
             points
         }
     })
-    #output$info <- renderPrint(a)
+    output$info <- renderPrint({
+        variables$not_to_plot_params
+    })
 
 }
 
