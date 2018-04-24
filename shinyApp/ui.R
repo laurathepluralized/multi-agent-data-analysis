@@ -14,6 +14,7 @@ library(shiny)
 library(ggplot2)
 library(shinydashboard)
 library(scatterD3)
+source('loading.R')
 
 # Read CSV into R
 #dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
@@ -30,6 +31,11 @@ ui <- dashboardPage(
     sidebarMenu(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
+      menuItem("Load Data", tabName = "dataLoading", icon = icon("dashboard")),
+      menuItem("Visualization", tabName = "visualization", icon = icon("dashboard")),
+      menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
+      menuItem("Correlation Analysis", tabName = "correlation", icon = icon("dashboard")),
+      menuItem("Modelling", tabName = "modelling", icon = icon("dashboard")),
       menuItem("Main", tabName = "main", icon = icon("dashboard")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o"))
     ),
@@ -40,6 +46,11 @@ ui <- dashboardPage(
   dashboardBody(
     tabItems(
       # First tab content
+      tabItem(tabName = "dataLoading", loading_ui()),
+      tabItem(tabName = "visualization", fluidRow()),
+      tabItem(tabName = "stability", fluidRow()),
+      tabItem(tabName = "correlation", fluidRow()),
+      tabItem(tabName = "modelling", fluidRow()),
       tabItem(tabName = "main",
               fluidRow(
                 box(plotOutput("plot1", height = 250)),
@@ -106,7 +117,7 @@ ui <- dashboardPage(
                                selected = "head"),
                   checkboxGroupInput("inCheckboxGroup",
                                      "Checkbox group input:",
-                                     c("label 1" = "option1",
+                                     c("Column names will show up" = "option1",
                                        "label 2" = "option2")),
                   uiOutput("choose_columns")
                   
