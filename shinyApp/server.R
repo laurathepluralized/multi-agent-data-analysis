@@ -15,12 +15,9 @@ source("analysis.R")
 
 options(shiny.maxRequestSize=500*1024^2)
 dsnames <- c()
-
-# Read CSV into R
-#dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
-dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
-#recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
-#head(dsim)
+targetColumn <- c()
+numericColumns <- c()
+categoricalColumns <- c()
 
 ## mtcars data for sample scatter plot in D3
 d <- mtcars
