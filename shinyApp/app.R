@@ -53,7 +53,8 @@ ui <- dashboardPage(
       id = "tabs",
       menuItem("Main", tabName = "main", icon = icon("dashboard")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
-      menuItem("Scatter Plot", tabName = "scatter", icon = icon("bar-chart-o"))
+      menuItem("Scatter Plot", tabName = "scatter", icon = icon("bar-chart-o")),
+      menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
     ),
     textOutput("res")
   ),
@@ -274,6 +275,10 @@ ui <- dashboardPage(
         plotOutput("plot_scatter", click = "plot_click", brush = "plot_brush"),
         verbatimTextOutput("info_scatter")
         
+    ),
+
+    tabItem(tabName='modeling',
+        h2("Modeling")
     )
   )
 )
