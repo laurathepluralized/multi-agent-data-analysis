@@ -16,8 +16,8 @@ library(shinydashboard)
 library(scatterD3)
 
 # Read CSV into R
-#dsim <- read.csv(file="data/alldata2.csv", header=TRUE, sep=",")
-dsim <- read.csv('data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+#dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
+dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
 
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
@@ -115,14 +115,14 @@ ui <- dashboardPage(
                 ),
                 box(
                   tableOutput("contents")
-                ),
-                box(
-                  tableOutput("filetable")
                 )
+                #box(
+                #  tableOutput("filetable")
+                #)
               ),
               fluidRow(
-                h2("Stability Analysis"),
                 box(
+                  title = "Stability Analysis",
                   tableOutput("stabilityAnalysis"),
                   width = 12
                 )

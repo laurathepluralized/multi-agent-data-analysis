@@ -31,12 +31,13 @@ The Shiny application uses the following R libraries:
 * dplyr
 * readxl
 * corrplot
+* randomForest
 
 To install these dependencies, after installing R, execute the following at
 the command line:
 
     $ R
-    > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3", "data.table", "sqldf", "dplyr", "readxl", "corrplot"))
+    > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3", "data.table", "sqldf", "dplyr", "readxl", "corrplot", "randomForest"))
 
 
 
