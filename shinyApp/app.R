@@ -602,11 +602,12 @@ server <- function(input, output, session) {
         # With base graphics, need to tell it what the x and y variables are.
         # Max of 10, otherwise we overload the user
         points <- brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
-        if (nrow(points) >= 10) {
-            points[1:10,]
-        } else {
-            points
-        }
+        #if (nrow(points) >= 10) {
+            #points[1:10,]
+        #} else {
+            #points
+        #}
+        head(points, 10)
     })
     
     #Leaving this as an output debugger that updates that we can look at
