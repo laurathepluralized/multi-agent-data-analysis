@@ -7,6 +7,8 @@ __pycache__/
 # C extensions
 *.so
 
+expManagerSQL2/node_modules/*
+
 # Distribution / packaging
 .Python
 env/
