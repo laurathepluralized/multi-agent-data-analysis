@@ -26,7 +26,7 @@ metriccols <- c('NonTeamCapture')
 ui <- fluidPage(
     selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
     selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols])),
-    uiOutput('sliders'),
+    uiOutput('valuefixers'),
     # remainingparams = select(dsim, -c('themetricy', 'theparamx'))
     plotOutput("plot1", click = "plot_click", brush = "plot_brush"),
     verbatimTextOutput("info")
@@ -41,16 +41,25 @@ server <- function(input, output, session) {
     })
 
 
-    output$sliders <- renderUI({
-        sliders <- lapply(1:length(paramcols), function(i) {
+    output$valuefixers <- renderUI({
+        valuefixers <- lapply(1:length(paramcols), function(i) {
             thevals <- dsim[paramcols[i]]
             inname <- names(thevals)
             if (inname != input$theparamx) {
-                # only make a slider if this isn't the x-axis variable
-                sliderInput(inname, inname, min=0, max=50, value=25, post="%")
+                if (is.numeric(thevals[1])) {
+                    themin = min(thevals)
+                    themax = max(thevals)
+                    middle = 0.5*(themin + themax)
+                    # only make a slider if this isn't the x-axis variable
+                    sliderInput(inname, inname, min=themin, max=themax, value=middle, post="%")
+                }
+                else {
+                    pickvals <- unique(thevals)
+                    selectInput(inname, inname, pickvals)
+                }
             }
         })
-        do.call(tagList, sliders)
+        do.call(tagList, valuefixers)
     })
 
     output$plot1 <- renderPlot({
