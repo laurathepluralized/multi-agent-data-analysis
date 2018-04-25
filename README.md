@@ -37,7 +37,7 @@ To install these dependencies, after installing R, execute the following at
 the command line:
 
     $ R
-    > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3", "data.table", "sqldf", "dplyr", "readxl", "corrplot", "randomForest"))
+    > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3", "data.table", "sqldf", "dplyr", "readxl", "corrplot", "randomForest", "caTools"))
 
 
 

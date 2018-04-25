@@ -356,10 +356,12 @@ if (model_selection == 1) { # Multivarite linear regression model
   y_pred<- predict(model,test_set)
 }
 
+return(model)
 summary(model)
 (mean((y_pred-test_set$result)^2))
 par(mfrow=c(2,2))#drawing in 2 by 2 format
 plot(model,which=c(1:4), col = "cornflowerblue")
 plot(model$fitted.values, model$residuals)
+
 
 ```
