@@ -17,7 +17,7 @@ library(shinydashboard)
 library(scatterD3)
 
 # Read CSV into R
-dsim <- read.csv(file="data/betterdata2.csv", header=TRUE, sep=",")
+dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
 #dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
 paramcols <- c('max_speed_t_1','turn_rate_max_t_1','turn_rate_max_predator','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
@@ -271,9 +271,8 @@ ui <- dashboardPage(
         selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
         selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols])),
         uiOutput('valuefixers'),
-        # remainingparams = select(dsim, -c('themetricy', 'theparamx'))
-        plotOutput("plot1", click = "plot_click", brush = "plot_brush"),
-        verbatimTextOutput("info")
+        plotOutput("plot_scatter", click = "plot_click", brush = "plot_brush"),
+        verbatimTextOutput("info_scatter")
         
     )
   )
@@ -537,6 +536,10 @@ server <- function(input, output, session) {
               lasso_callback = "function(sel) {alert(sel.data().map(function(d) {return d.lab}).join('\\n'));}")
   })
 
+
+
+
+
     variables = reactiveValues(not_to_plot_params = c())
 
     observeEvent(input$theparamx, {
@@ -576,7 +579,7 @@ server <- function(input, output, session) {
 
     #observeEvent(input$valuefixers
 
-    output$plot1 <- renderPlot({
+    output$plot_scatter<- renderPlot({
         data = dsim 
         to_plot = data
         for (i in 1:length(variables$not_to_plot_params)) {
@@ -595,7 +598,7 @@ server <- function(input, output, session) {
         plot(to_plot[, c(input$theparamx, input$themetricy)])
     })
 
-    output$info <- renderPrint({
+    output$info_scatter <- renderPrint({
         # With base graphics, need to tell it what the x and y variables are.
         # Max of 10, otherwise we overload the user
         points <- brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
