@@ -15,7 +15,9 @@ library(shiny)
 library(ggplot2)
 library(shinydashboard)
 library(scatterD3)
-source("modeling.R")
+#source("modeling.R")
+source('../analysis/Regression.R')
+source('../analysis/ML.R')
 
 # Read CSV into R
 dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
@@ -24,8 +26,7 @@ paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_
 metriccols <- c('NonTeamCapture')
 
 # These are the types of modeling we can use in the modeling tab
-models <- c('Multivariate linear regression',
-            'Linear regression with backward elimination',
+models <- c('Linear regression with backward elimination',
             'Principal component regression (using PCA)',
             'Partial least squares',
             'Random Forest Regression',
@@ -378,7 +379,7 @@ server <- function(input, output, session) {
   )
   })
 
-  variables = reactiveValues(not_to_plot_params = c())
+  variables = reactiveValues(not_to_plot_params = c(), current_model = NULL)
 
   observeEvent(input$theparamx, {
     variables$not_to_plot_params = paramcols[paramcols != input$theparamx]
@@ -458,21 +459,28 @@ server <- function(input, output, session) {
   #model = run_modeling(dsim, 1)
 
 
-  # Writes the summary output of run_modeling
+  # updates the cur_model variable to the current model 
   # TODO: Get the summary working for all model types
+  observeEvent(input$model_to_use, {
+    if (which(models == input$model_to_use) == 1) {
+        model = run_modeling_regression(dsim)
+    } else {
+        # subtract 1 because ML.R starts at 1 for PCA
+        list[model, rms] = run_modeling(dsim, which(models == input$model_to_use) - 1)
+    }
+    variables$current_model = model
+  })
+
   output$info_modeling <- renderPrint({
-    model = run_modeling(dsim, which(models == input$model_to_use))
-    #input$model_to_use
-    summary(model)
+    summary(variables$current_model)
   })
 
   # Draws the graph output of the model from run_modeling
   # TODO: Get summaries and graphs working for all of the model types
   output$graph_modeling <- renderPlot({
-    model = run_modeling(dsim, which(models == input$model_to_use))
-    par(mfrow=c(2,2))#drawing in 2 by 2 format
-    plot(model,which=c(1:4), col = "cornflowerblue")
-    plot(model$fitted.values, model$residuals);
+    #par(mfrow=c(2,2))#drawing in 2 by 2 format
+    #plot(variables$current_model,which=c(1:4), col = "cornflowerblue")
+    #plot(variables$current_model$fitted.values, variables$current_model$residuals);
   })
 }
 shinyApp(ui = ui, server = server)

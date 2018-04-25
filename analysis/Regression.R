@@ -13,7 +13,7 @@ library(caTools)
 
 
 # The function
-run_modeling <- function(data2) {
+run_modeling_regression <- function(data2) {
   result_col = "NonTeamCapture"
   
   ##specify response variable (y) and name it result
@@ -96,11 +96,11 @@ run_modeling <- function(data2) {
       backward = backward - length(NewVar)
     }
   }
-  y_pred<- predict(lmtest2,test_set)
+  #y_pred<- predict(lmtest2,test_set)
   
   summary(model)
-  par(mfrow=c(2,2))#drawing in 2 by 2 format
-  plot(model,which=c(1:4), col = "cornflowerblue")
-  plot(model$fitted.values, model$residuals)
+  #par(mfrow=c(2,2))#drawing in 2 by 2 format
+  #plot(model,which=c(1:4), col = "cornflowerblue")
+  #plot(model$fitted.values, model$residuals)
   return(model)
 }

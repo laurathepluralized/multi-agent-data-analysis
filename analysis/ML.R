@@ -86,10 +86,10 @@ run_modeling <- function(data2, model_selection) {
     y_pred<- predict(model,test_set)
   }
   # Root mean squared error for model evaluation
-  (mean((y_pred-test_set$result)^2))
+  rms_error <- (mean((y_pred-test_set$result)^2))
   
   # The function returns the model so that we can access whatever we need in the
   # app.R file for the visualization
-  return(model)
+  return(model, rms_error)
   
 }
