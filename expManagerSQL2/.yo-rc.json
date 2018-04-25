@@ -1,0 +1,39 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "edu.gatech.hpan.expmanager"
+    },
+    "jhipsterVersion": "4.14.0",
+    "baseName": "expManagerSQL2",
+    "packageName": "edu.gatech.hpan.expmanager",
+    "packageFolder": "edu/gatech/hpan/expmanager",
+    "serverPort": "8080",
+    "authenticationType": "session",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSocialSignIn": false,
+    "enableSwaggerCodegen": false,
+    "rememberMeKey": "abec61e10a56d047a6fa9cbe1c2dc1e25666bef1",
+    "clientFramework": "angularX",
+    "useSass": false,
+    "clientPackageManager": "yarn",
+    "applicationType": "monolith",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-db-helper",
+        "version": "1.0.0"
+      }
+    ],
+    "enableTranslation": false,
+    "enableHibernateCache": false
+  }
+}

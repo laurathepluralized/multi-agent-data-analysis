@@ -1,0 +1,14 @@
+version: '2'
+services:
+    expmanagersql2-app:
+        image: expmanagersql2
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mysql://expmanagersql2-mysql:3306/expmanagersql2?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    expmanagersql2-mysql:
+        extends:
+            file: mysql.yml
+            service: expmanagersql2-mysql

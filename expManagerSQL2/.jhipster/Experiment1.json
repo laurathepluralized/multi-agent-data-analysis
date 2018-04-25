@@ -1,0 +1,16 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "index",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180422195853",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "experiment1",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}
