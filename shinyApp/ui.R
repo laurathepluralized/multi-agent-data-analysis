@@ -31,7 +31,8 @@ ui <- dashboardPage(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
       menuItem("Main", tabName = "main", icon = icon("dashboard")),
-      menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o"))
+      menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
+      menuItem("Interactive Scatterplot", tabName="scatter", icon = icon("bar-chart-o"))
     ),
     textOutput("res")
   ),
@@ -242,7 +243,23 @@ ui <- dashboardPage(
                 )
               )
               
-                              )
-                      )
-                )
-      )
+        ),
+        tabItem(tabName="scatter",
+            h2("Interactive Scatterplot"),
+            scatterInput("scatter")
+            #fluidPage(
+            #selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
+            #selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols])),
+            #uiOutput('valuefixers'),
+            ## remainingparams = select(dsim, -c('themetricy', 'theparamx'))
+            #plotOutput("plot1", click = "plot_click", brush = "plot_brush"),
+            #verbatimTextOutput("info")
+            #)
+
+
+        )
+
+    )
+  )
+)
+

@@ -38,6 +38,8 @@ threshold_line <- data.frame(slope = 0,
                              stroke_width = 2,
                              stroke_dasharray = "")
 
+
+
 server <- function(input, output, session) {
   
   ## output table for file contents (Main)
@@ -264,4 +266,9 @@ server <- function(input, output, session) {
                              text = "Yep, you can even use <strong>markup</strong> in caption text. <em>Incredible</em>, isn't it ?"),
               lasso_callback = "function(sel) {alert(sel.data().map(function(d) {return d.lab}).join('\\n'));}")
   })
+
+
+
+  scatter <- callModule(scatter, "scatter", stringsAsFactors=False)
+  output <- scatter()
 }
