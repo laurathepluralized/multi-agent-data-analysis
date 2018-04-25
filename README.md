@@ -8,7 +8,8 @@ simulator (https://github.com/gtri/scrimmage/) in mind.
 
 ## I don't want to use SCRIMMAGE, but I have lots of CSV files. Can I still use this tool?
 Any non-temporal simulation data that can be put into a CSV file can be
-analyzed with this tool.
+analyzed with this tool, with minor modifications (specifying column names
+and types, file locations).
 Just be aware that the aggregation and cleaning scripts in the pythonStuff
 directory are not likely to work on your data if it wasn't generated with
 SCRIMMAGE.
@@ -21,40 +22,17 @@ Follow the directions for your operating system of choice from
 https://cran.r-project.org/ to install R.
 
 ### Required R Dependencies:
-The Shiny application uses the following R libraries:
-* shiny
-* shinydashboard
-* ggplot2
-* scatterD3
-* data.table
-* sqldf
-* dplyr
-* readxl
-* corrplot
-* randomForest
+The Shiny application depends upon a number of R libraries. 
+To install these dependencies, after installing R, execute the following in the
+R console:
 
-To install these dependencies, after installing R, execute the following at
-the command line:
-
-    $ R
     > install.packages(c("shiny", "shinydashboard", "ggplot2", "scatterD3", "data.table", "sqldf", "dplyr", "readxl", "corrplot", "randomForest", "caTools", "pls"))
 
 
+To run the Shiny application, run the following at the R console from the
+root directory of this repository:
 
-To run the Shiny application, run the following at the command line (assumes
-current directory is `multi-agent-data-analysis`):
-
-    $ R
     > library(shiny)
     > runApp("shinyApp")
-
-
-
-
-
-
-
-
-
 
 
