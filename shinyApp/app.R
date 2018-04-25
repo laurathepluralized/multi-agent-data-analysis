@@ -381,7 +381,7 @@ server <- function(input, output, session) {
   variables = reactiveValues(not_to_plot_params = c())
 
   observeEvent(input$theparamx, {
-  variables$not_to_plot_params = paramcols[paramcols != input$theparamx]
+    variables$not_to_plot_params = paramcols[paramcols != input$theparamx]
   })
 
   #reactive({not_to_plot_params <- paramcols[paramcols != input$theparamx]})
@@ -390,68 +390,63 @@ server <- function(input, output, session) {
   #a <- 1
   #b <- 10
   mydata <- reactive({
-  dsim[, c(input$theparamx, input$themetricy)]
+    dsim[, c(input$theparamx, input$themetricy)]
   })
 
 
   output$valuefixers <- renderUI({
-  valuefixers <- lapply(1:length(paramcols), function(i) {
-    thevals <- dsim[paramcols[i]]
-    inname <- names(thevals)
-    # only make a variable-fixing element if this isn't the x-axis var
-    if (inname != input$theparamx) {
-    if (is.numeric(thevals[,1])) {
-      themin = min(thevals)
-      themax = max(thevals)
-      stepsize <- NULL
-      uniquevals <- unique(thevals[,1])
-      if (length(uniquevals) > 1) {
-      stepsize <- uniquevals[2] - uniquevals[1]
+    valuefixers <- lapply(1:length(paramcols), function(i) {
+      thevals <- dsim[paramcols[i]]
+      inname <- names(thevals)
+      # only make a variable-fixing element if this isn't the x-axis var
+      if (inname != input$theparamx) {
+        if (is.numeric(thevals[,1])) {
+          themin = min(thevals)
+          themax = max(thevals)
+          stepsize <- NULL
+          uniquevals <- unique(thevals[,1])
+          if (length(uniquevals) > 1) {
+            stepsize <- uniquevals[2] - uniquevals[1]
+          }
+          sliderInput(inname,
+          paste('Select fixed value for ', inname), min=themin,
+          max=themax, value=c(themin, themax), step = stepsize, round = -2)
+        }
+        else {
+          pickvals <- unique(thevals)
+          selectInput(inname,
+          paste('Select fixed value for ', inname), pickvals)
+        }
       }
-      sliderInput(inname,
-      paste('Select fixed value for ', inname), min=themin,
-      max=themax, value=c(themin, themax), step = stepsize, round = -2)
-    }
-    else {
-      pickvals <- unique(thevals)
-      selectInput(inname,
-      paste('Select fixed value for ', inname), pickvals)
-    }
-    }
-  })
-  do.call(tagList, valuefixers)
+    })
+    do.call(tagList, valuefixers)
   })
 
-  #observeEvent(input$valuefixers
 
+  plotIsScatter <- TRUE
   output$plot_scatter<- renderPlot({
-  data = dsim 
-  to_plot = data
-  for (i in 1:length(variables$not_to_plot_params)) {
-    param = variables$not_to_plot_params[i]
-
-    # the below lines are for debugging if something goes wrong
-    #print('=========================')
-    #print(param)
-    #print(to_plot[param][1,1])
-    #
-    
-    to_plot = to_plot[which(to_plot[param] == input[[param]]),]
-  }
-    
-    
-  plot(to_plot[, c(input$theparamx, input$themetricy)])
+    data = dsim 
+    to_plot = data
+    for (i in 1:length(variables$not_to_plot_params)) {
+      param = variables$not_to_plot_params[i]
+      to_plot = to_plot[which(to_plot[param] == input[[param]]),]
+    }
+    if (is.numeric(dsim[,input$theparamx][1])) {
+        plot(to_plot[ c(input$theparamx, input$themetricy)])
+        plotIsScatter <- TRUE
+    } else {
+        x = (to_plot[, c(input$theparamx)])
+        y = (to_plot[, c(input$themetricy)])
+        boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
+        plotIsScatter <- FALSE
+    }
+    plot(to_plot[, c(input$theparamx, input$themetricy)])
   })
 
   output$info_scatter <- renderPrint({
     # With base graphics, need to tell it what the x and y variables are.
     # Max of 10, otherwise we overload the user
     points <- brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
-    #if (nrow(points) >= 10) {
-      #points[1:10,]
-    #} else {
-      #points
-    #}
     head(points, 10)
   })
   
