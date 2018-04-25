@@ -1,9 +1,3 @@
-
-
-
-
-
-
 library(shiny)
 library(ggplot2)
 library(dplyr)
@@ -72,8 +66,25 @@ server <- function(input, output, session) {
         do.call(tagList, valuefixers)
     })
 
+    #observeEvent(input$valuefixers
+
     output$plot1 <- renderPlot({
-        plot(mydata())
+        data = dsim 
+        to_plot = data
+        for (i in 1:length(variables$not_to_plot_params)) {
+            param = variables$not_to_plot_params[i]
+
+            # the below lines are for debugging if something goes wrong
+            #print('=========================')
+            #print(param)
+            #print(to_plot[param][1,1])
+            #
+            
+            to_plot = to_plot[which(to_plot[param] == input[[param]]),]
+        }
+        
+        
+        plot(to_plot[, c(input$theparamx, input$themetricy)])
     })
 
     output$info <- renderPrint({
@@ -86,9 +97,12 @@ server <- function(input, output, session) {
             points
         }
     })
-    output$info <- renderPrint({
-        variables$not_to_plot_params
-    })
+    
+    #Leaving this as an output debugger that updates that we can look at
+    #output$info <- renderPrint({
+        ##variables$not_to_plot_params[1]
+        ##dsimcsv[which(dsimcsv[variables$not_to_plot_params[1]] == input[[variables$not_to_plot_params[1]]]),]
+    #})
 
 }
 
