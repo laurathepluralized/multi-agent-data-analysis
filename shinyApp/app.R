@@ -405,7 +405,6 @@ server <- function(input, output, session) {
       themax = max(thevals)
       stepsize <- NULL
       uniquevals <- unique(thevals[,1])
-      browser()
       if (length(uniquevals) > 1) {
       stepsize <- uniquevals[2] - uniquevals[1]
       }
