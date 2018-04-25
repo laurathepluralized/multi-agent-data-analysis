@@ -22,6 +22,8 @@ dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
 #dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
 paramcols <- c('max_speed_t_1','turn_rate_max_t_1','turn_rate_max_predator','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
+
+# These are the types of modeling we can use in the modeling tab
 models <- c('Multivariate linear regression', 'Linear regression with backward elimination', 'Principal component regression (using PCA)', 'Partial least squares', 'Random Forest Regression', 'Neural networks')
 
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
@@ -626,11 +628,18 @@ server <- function(input, output, session) {
         ##dsimcsv[which(dsimcsv[variables$not_to_plot_params[1]] == input[[variables$not_to_plot_params[1]]]),]
     #})
     #model = run_modeling(dsim, 1)
+
+
+    # Writes the summary output of run_modeling
+    # TODO: Get the summary working for all model types
     output$info_modeling <- renderPrint({
         model = run_modeling(dsim, which(models == input$model_to_use))
         #input$model_to_use
         summary(model)
     })
+
+    # Draws the graph output of the model from run_modeling
+    # TODO: Get summaries and graphs working for all of the model types
     output$graph_modeling <- renderPlot({
         model = run_modeling(dsim, which(models == input$model_to_use))
         par(mfrow=c(2,2))#drawing in 2 by 2 format

@@ -1,3 +1,5 @@
+# This is the file that has the function run_modeling that is called in app.R
+# for the modeling tab
 library(data.table)
 library(sqldf)
 library(dplyr)
@@ -8,6 +10,9 @@ library(corrplot)
 library(data.table)
 library(ggplot2)
 library(caTools)
+
+
+# The function
 run_modeling <- function(data2, model_selection) {
 result_col = "NonTeamCapture"
 
@@ -120,6 +125,8 @@ if (model_selection == 1) { # Multivarite linear regression model
   y_pred<- predict(model,test_set)
 }
 
+# The function returns the model so that we can access whatever we need in the
+# app.R file for the visualization
 return(model)
 #summary(model)
 #(mean((y_pred-test_set$result)^2))
