@@ -17,7 +17,7 @@ library(shinydashboard)
 library(scatterD3)
 source("modeling.R")
 source("analysis.R")
-source('loading.R')
+source("loading.R")
 
 # Read CSV into R
 dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
@@ -68,7 +68,7 @@ ui <- dashboardPage(
   dashboardBody(
     tabItems(
       # First tab content
-      tabItem(tabName = "main", loading_ui()
+      tabItem(tabName = "main", loading_ui(), preview_ui()
       ),
       # Second tab content
       tabItem(tabName = "widgets",
@@ -113,92 +113,9 @@ ui <- dashboardPage(
 
 
 server <- function(input, output, session) {
+  
+  handle_loading(input, output, session)
 
-  ## output table for file contents (Main)
-  output$contents <- renderTable({
-  
-  # input$file1 will be NULL initially. After the user selects
-  # and uploads a file, head of that data file by default,
-  # or all rows if selected, will be shown.
-  
-  req(input$file1)
-  
-  df <- read.csv(input$file1$datapath,
-    header = input$header,
-    sep = input$sep,
-    quote = input$quote)
-  
-  
-  if(input$disp == "head") {
-    return(head(df))
-  }
-  else {
-    return(df)
-  }
-    
-  })
-
-  #This function is responsible for loading in the selected file
-  filedata <- reactive ({
-  req(input$file1)
-  infile <- input$file1
-  if (is.null(infile)) {
-    # User has not uploaded a file yet
-    return(NULL)
-  }
-  read.csv(infile$datapath)
-  })
-
-  observe ({
-  req(input$file1)
-  dsnames <- names(filedata())
-  cb_options <- list()
-  cb_options[ dsnames] <- dsnames
-  updateCheckboxGroupInput(session, "inCheckboxGroup",
-    label = "Check Box Group",
-    choices = cb_options,
-    selected = "")
-  })
-  
-  #The following set of functions populate the column selectors
-  output$toCol <- renderUI ({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  
-  items=names(df)
-  names(items)=items
-  selectInput("to", "To:",items)
-  
-  })
-  
-  output$fromCol <- renderUI ({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  
-  items=names(df)
-  names(items)=items
-  selectInput("from", "From:",items)
-  
-  })
-  
-  #The checkbox selector is used to determine whether we want an optional column
-  output$amountflag <- renderUI ({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  
-  checkboxInput("amountflag", "Use values?", FALSE)
-  })
-  
-  #If we do want the optional column, this is where it gets created
-  output$amountCol <- renderUI({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  #Let's only show numeric columns
-  nums <- sapply(df, is.numeric)
-  items=names(nums[nums])
-  names(items)=items
-  selectInput("amount", "Amount:",items)
-  })
   
   #This previews the CSV data file
   #output$filetable <- renderTable ({
@@ -227,37 +144,7 @@ server <- function(input, output, session) {
   output$stabilityAnalysis <- renderTable ({
   stabilityOutput()
   })
-#   output$stabilityAnalysis <- renderTable ({
-#     # input$file1 will be NULL initially. After the user selects
-#     # and uploads a file, head of that data file by default,
-#     # or all rows if selected, will be shown.
-#   
-#     if(input$runStability) {
-#       req(input$file1)
-#     
-#       df <- read.csv(input$file1$datapath,
-#         header = input$header,
-#         sep = input$sep,
-#         quote = input$quote)
-#     
-#       result_col <- input$result_col
-#       numericCol <- c("vel_max.t.1",
-#         "vel_max.predator",
-#         "pitch_rate_max.predator",
-#         "turn_rate_max.predator")
-#       categoryCol <- c("team_id",
-#         "allow_prey_switching.t.2.predator")
-#     
-#       stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
-#    
-#       return(stabilityResults)
-#  }
-#  
-#  return (c(0,0))
-#  }
-#  )
-  
-  
+
   ## output text message for sidebar selection
   output$res <- renderText({
   paste("You've selected:", input$tabs)

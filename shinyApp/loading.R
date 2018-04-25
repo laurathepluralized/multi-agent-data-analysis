@@ -2,8 +2,10 @@ library(shiny)
 library(shinydashboard)
 
 handle_loading <- function(input, output, session) {
+  cat(file=stderr(), "handle loading")
   return(
     output$loading_hp_data_file_preview <- renderTable({
+      cat(file=stderr(), "handle preview")
       
       # input$loading_hp_data_file will be NULL initially. After the user selects
       # and uploads a file, head of that data file by default,
@@ -17,17 +19,20 @@ handle_loading <- function(input, output, session) {
                                     quote = input$loading_hp_data_file_quote)
       
       dsnames <- names(session$userData$data_file)
+      cat(file=stderr(), "options: ", dsnames)
       cb_options <- list()
       cb_options[ dsnames] <- dsnames
       updateCheckboxGroupInput(session, "loading_hp_data_file_headers",
                                label = "Check Box Group",
                                choices = cb_options,
                                selected = "")
+      
       updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
+      
       
       session$userData$testText <- "testText"
       
-      if(input$disp == "head") {
+      if(input$loading_hp_data_file_disp == "head") {
         return(head(session$userData$data_file))
       }
       else {
