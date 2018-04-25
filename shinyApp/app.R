@@ -21,6 +21,7 @@ dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
 #dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
 paramcols <- c('max_speed_t_1','turn_rate_max_t_1','turn_rate_max_predator','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
+models <- c('Multivariate linear regression', 'Linear regression with backward elimination', 'Principal component regression (using PCA)', 'Partial least squares')
 
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
@@ -278,7 +279,9 @@ ui <- dashboardPage(
     ),
 
     tabItem(tabName='modeling',
-        h2("Modeling")
+        h2("Modeling"),
+        selectInput('model_to_use', 'Select Which Model To Use', models),
+        verbatimTextOutput("info_modeling")
     )
   )
 )
@@ -620,6 +623,9 @@ server <- function(input, output, session) {
         ##variables$not_to_plot_params[1]
         ##dsimcsv[which(dsimcsv[variables$not_to_plot_params[1]] == input[[variables$not_to_plot_params[1]]]),]
     #})
+    output$info_modeling <- renderPrint({
+        input$model_to_use
+    })
 
 }
 shinyApp(ui = ui, server = server)
