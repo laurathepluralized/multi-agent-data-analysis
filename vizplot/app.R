@@ -9,21 +9,24 @@ library(ggplot2)
 library(dplyr)
 
 #options(shiny.maxRequestSize=1000*1024^2)
-dsimcsv <- read.csv('./../shinyApp/data/alldata2.csv', stringsAsFactors = FALSE, header=TRUE)
+dsimcsv <- read.csv('./../shinyApp/data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
+dsimcsv <- dsimcsv[dsimcsv$team_id!=1,]  # our metrics for this data only involve team 2
 storefile <- file.path('./', 'data.rds')
 saveRDS(dsimcsv, file = storefile)
 dsim <- readRDS(storefile)
-paramcols <- c('avoid_nonteam_weight_t_1','avoid_team_weight_t_1', 'max_speed_t_1', 'max_pred_speed_t_2_predator')
+paramcols <- c('max_speed_t_1','turn_rate_max_t_1','turn_rate_max_predator','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
 
-# Given the x and y param and metric we want to plot, and a list containing the the other params and values that they are fixed at to plot, plot only the rows in which all of the other params are at those fixed values
+# Given the x and y param and metric we want to plot, and a list containing
+# the the other params and values that they are fixed at to plot, plot only
+# the rows in which all of the other params are at those fixed values
 
 
 ui <- fluidPage(
     selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
     selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols])),
-    uiOutput('sliders'),
+    uiOutput('valuefixers'),
     # remainingparams = select(dsim, -c('themetricy', 'theparamx'))
     plotOutput("plot1", click = "plot_click", brush = "plot_brush"),
     verbatimTextOutput("info")
@@ -48,12 +51,25 @@ server <- function(input, output, session) {
     })
 
 
-    output$sliders <- renderUI({
-        sliders <- lapply(1:length(paramcols), function(i) {
-            inname <- paramcols[i]
-            sliderInput(inname, inname, min=10, max=50, value=25, post="%")
+    output$valuefixers <- renderUI({
+        valuefixers <- lapply(1:length(paramcols), function(i) {
+            thevals <- dsim[paramcols[i]]
+            inname <- names(thevals)
+            if (inname != input$theparamx) {
+                if (is.numeric(thevals[1])) {
+                    themin = min(thevals)
+                    themax = max(thevals)
+                    middle = 0.5*(themin + themax)
+                    # only make a slider if this isn't the x-axis variable
+                    sliderInput(inname, inname, min=themin, max=themax, value=middle, post="%")
+                }
+                else {
+                    pickvals <- unique(thevals)
+                    selectInput(inname, inname, pickvals)
+                }
+            }
         })
-        do.call(tagList, sliders)
+        do.call(tagList, valuefixers)
     })
 
     output$plot1 <- renderPlot({
