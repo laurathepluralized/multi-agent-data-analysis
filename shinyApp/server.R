@@ -12,6 +12,7 @@ library(ggplot2)
 library(shinydashboard)
 library(scatterD3)
 source("analysis.R")
+source('loading.R')
 
 options(shiny.maxRequestSize=500*1024^2)
 dsnames <- c()
