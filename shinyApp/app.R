@@ -282,6 +282,7 @@ ui <- dashboardPage(
     tabItem(tabName='modeling',
         h2("Modeling"),
         selectInput('model_to_use', 'Select Which Model To Use', models),
+        plotOutput("graph_modeling"),
         verbatimTextOutput("info_modeling")
     )
   )
@@ -630,6 +631,11 @@ server <- function(input, output, session) {
         #input$model_to_use
         summary(model)
     })
-
+    output$graph_modeling <- renderPlot({
+        model = run_modeling(dsim, which(models == input$model_to_use))
+        par(mfrow=c(2,2))#drawing in 2 by 2 format
+        plot(model,which=c(1:4), col = "cornflowerblue")
+        plot(model$fitted.values, model$residuals);
+    })
 }
 shinyApp(ui = ui, server = server)
