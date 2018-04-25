@@ -60,7 +60,7 @@ runStablilityCheck <- function(data, result_col, numericCols, categoryCols) {
   colnames(data2)[colnames(data2) == result_col] <- 'result'
   data <- data2
   
-  ##read useful varaibles only (specified above)
+  ##read useful variables only (specified above)
   mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
