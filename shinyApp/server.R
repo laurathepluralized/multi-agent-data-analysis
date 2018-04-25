@@ -126,39 +126,61 @@ server <- function(input, output, session) {
   })
   
   #This previews the CSV data file
-  output$filetable <- renderTable({
+  #output$filetable <- renderTable({
+  #  filedata()
+  #})
+  
+  ## render table for stability analysis 
+  ## data for stability analysis
+  stabilityData <- reactive({
     filedata()
+    if (is.null(filedata())) return(NULL)
+  })
+  
+  stabilityOutput <- reactive({
+    result_col = "NonTeamCapture"
+    numericCol <- c("vel_max_t_1",
+                    "vel_max_predator",
+                    "pitch_rate_max_predator",
+                    "turn_rate_max_predator")
+    categoryCol <- c("team_id",
+                     "allow_prey_switching_t_2_predator")
+    runStablilityCheck(stabilityData(), result_col, numericCol, categoryCol)
+    
   })
   
   output$stabilityAnalysis <- renderTable({
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
-    if(input$runStability){
-      req(input$file1)
-      
-      df <- read.csv(input$file1$datapath,
-                     header = input$header,
-                     sep = input$sep,
-                     quote = input$quote)
-      
-      result_col <- input$result_col
-      numericCol <- c("vel_max.t.1",
-                      "vel_max.predator",
-                      "pitch_rate_max.predator",
-                      "turn_rate_max.predator")
-      categoryCol <- c("team_id",
-                       "allow_prey_switching.t.2.predator")
-      
-      stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
-      
-      return(stabilityResults)
-    }
-    
-    return (c(0,0))
-    }
-    )
+    stabilityOutput()
+  })
+#   output$stabilityAnalysis <- renderTable({
+#     # input$file1 will be NULL initially. After the user selects
+#     # and uploads a file, head of that data file by default,
+#     # or all rows if selected, will be shown.
+#     
+#     if(input$runStability){
+#       req(input$file1)
+#       
+#       df <- read.csv(input$file1$datapath,
+#                      header = input$header,
+#                      sep = input$sep,
+#                      quote = input$quote)
+#       
+#       result_col <- input$result_col
+#       numericCol <- c("vel_max.t.1",
+#                       "vel_max.predator",
+#                       "pitch_rate_max.predator",
+#                       "turn_rate_max.predator")
+#       categoryCol <- c("team_id",
+#                        "allow_prey_switching.t.2.predator")
+#       
+#       stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
+#      
+#      return(stabilityResults)
+#    }
+#    
+#    return (c(0,0))
+#    }
+#    )
   
   ## output progress box increment (Main)
   output$progressBox <- renderInfoBox({
