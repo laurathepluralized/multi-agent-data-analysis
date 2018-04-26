@@ -4,7 +4,7 @@ library(shinydashboard)
 handle_loading <- function(input, output, session) {
   cat(file=stderr(), "handle loading")
   return(
-    output$loading_hp_data_file_preview <- renderTable({
+    output$loading_hp_data_file_preview <-  renderDataTable({
       cat(file=stderr(), "handle preview")
       
       # input$loading_hp_data_file will be NULL initially. After the user selects
@@ -127,7 +127,13 @@ loading_ui <- function() {
 preview_ui <- function(){
   return (
     fluidRow(
-      box(tableOutput("loading_hp_data_file_preview"))
+      # tableOutput("loading_hp_data_file_preview")
+      box(width=12,
+        column(12,
+               div(style = 'overflow-x: scroll', dataTableOutput('loading_hp_data_file_preview'))
+        )
+      )
+      
     )
   )
 }
