@@ -61,10 +61,10 @@ ui <- dashboardPage(
     sidebarMenu(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
-      menuItem("Main", tabName = "main", icon = icon("dashboard")),
-      menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
+      menuItem("Main", tabName = "main", icon = icon("caret-up")),
+      menuItem("Stability Analysis", tabName = "stability", icon = icon("th")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
-      menuItem("Scatter Plot", tabName = "scatter", icon = icon("bar-chart-o")),
+      menuItem("Scatter Plot", tabName = "scatter", icon = icon("sliders")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
     ),
     textOutput("res")
@@ -79,6 +79,36 @@ ui <- dashboardPage(
       # Second tab content
       tabItem(tabName = "widgets",
         h2("Using k-means clustering"),
+# The following code between the lines beginning with # --- was heavily based
+# on the kmeans-example code at this repo:
+# https://github.com/rstudio/shiny-examples/tree/master/050-kmeans-example
+# which was released under the MIT license here:
+# https://shiny.rstudio.com/gallery/kmeans-example.html
+# MIT license preamble prepended to the code by Laura Strickland as a
+# good-faith effort to adhere to the licensing requirements.
+# The code was changed to fit with the data we wish to analyze.
+
+# --- Begin K-Means Clustering MIT-licensed UI code
+# Copyright (c) 2014, Joe Cheng <joe@rstudio.com>
+
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         fluidRow(
           box(
             selectInput('xcol', 'X Variable', names(dsim)),
@@ -97,6 +127,8 @@ ui <- dashboardPage(
             verbatimTextOutput("info")
           )
         )
+# --- end K-Means Clustering MIT-licensed UI code
+
       ),
       tabItem(tabName='modeling',
         h2("Modeling"),
@@ -131,14 +163,44 @@ server <- function(input, output, session) {
   #output$filetable <- renderTable ({
   #  filedata()
   #})
-  
-  
 
   ## output text message for sidebar selection
   output$res <- renderText({
-  paste("You've selected:", input$tabs)
+    paste("You've selected:", input$tabs)
   })
   
+# The following code between the lines beginning with # --- was heavily based
+# on the kmeans-example code at this repo:
+# https://github.com/rstudio/shiny-examples/tree/master/050-kmeans-example
+# which was released under the MIT license here:
+# https://shiny.rstudio.com/gallery/kmeans-example.html
+# MIT license preamble added by Laura Strickland as a good-faith effort to
+# adhere to the licensing requirements.
+# The code was changed to fit with the data we wish to analyze.
+
+# --- Begin K-Means Clustering MIT-licensed server code
+
+# Copyright (c) 2014, Joe Cheng <joe@rstudio.com>
+
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
   ## output plot for multi-robot simulation data (Widgets)
   ## data for k-means cluster - dsim
   selectedData <- reactive({
@@ -169,6 +231,7 @@ server <- function(input, output, session) {
     paste0("xmin=", round(e$xmin, 1), " xmax=", round(e$xmax, 1), 
     " ymin=", round(e$ymin, 1), " ymax=", round(e$ymax, 1))
   }
+# --- end K-Means Clustering MIT-licensed server code
   
   paste0(
     "click: ", xy_str(input$plot_click),
