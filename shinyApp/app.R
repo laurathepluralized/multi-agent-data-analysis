@@ -27,7 +27,7 @@ dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
 default_data = dsim
 
 dsnames <- names(dsim)
-default_columns <- dsnames
+default_columns <- dsnames[order(dsnames)]
 paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 

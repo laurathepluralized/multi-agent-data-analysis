@@ -29,7 +29,7 @@ handle_loading <- function(input, output, session) {
       
       updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
       
-      session$userData$columnNames <- dsnames
+      session$userData$columnNames <- dsnames[order(dsnames)]
       
       session$userData$testText <- "testText"
       
