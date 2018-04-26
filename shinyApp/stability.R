@@ -24,7 +24,7 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
 stabilityAnalysis <- function(input, output, session, stringsAsFactors){
   
   observeEvent(input$runStab, {
-    cat(file=stderr(), "running stability analysis")
+    cat(file=stderr(), "running stability analysis with: ", session$userData$testText)
   })
   
   ## render table for stability analysis 
