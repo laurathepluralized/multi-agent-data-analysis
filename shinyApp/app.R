@@ -19,6 +19,7 @@ source("modeling.R")
 source("analysis.R")
 source("loading.R")
 source("stability.R")
+source("correlation_analysis.R")
 
 # Read Default CSV into R
 
@@ -63,6 +64,7 @@ ui <- dashboardPage(
       id = "tabs",
       menuItem("Main", tabName = "main", icon = icon("dashboard")),
       menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
+      menuItem("Correlation", tabName = "correlationtab", icon = icon("bar-chart-o")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
       menuItem("Scatter Plot", tabName = "scatter", icon = icon("bar-chart-o")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
@@ -76,6 +78,7 @@ ui <- dashboardPage(
       # First tab content
       tabItem(tabName = "main", loading_ui(), preview_ui()),
       tabItem(tabName = "stability", stabilityAnalysisUI("stability", "Stability Analysis")),
+      tabItem(tabName = "correlationtab",correlationAnalysisUI("correTab", "Correlation Analysis")),
       # Second tab content
       tabItem(tabName = "widgets",
         h2("Using k-means clustering"),
@@ -125,6 +128,7 @@ server <- function(input, output, session) {
   
   handle_loading(input, output, session)
   callModule(stabilityAnalysis, "stability", stringsAsFactors = FALSE)
+  callModule(correlationAnalysis, "correTab", stringsAsFactors = FALSE)
 
   
   #This previews the CSV data file
