@@ -23,8 +23,8 @@ source("stability.R")
 # Read Default CSV into R
 
 #I vote that we rename this to default_data
-# dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
-dsim <- read.csv(file="data/pred-prey-lhs-small.csv", header=TRUE, sep=",")
+dsim <- read.csv(file="data/default_data.csv", header=TRUE, sep=",")
+# dsim <- read.csv(file="data/pred-prey-lhs-small.csv", header=TRUE, sep=",")
 default_data = dsim
 
 dsnames <- names(dsim)
