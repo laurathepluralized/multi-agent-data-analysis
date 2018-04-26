@@ -12,15 +12,13 @@ library(ggplot2)
 library(shinydashboard)
 library(scatterD3)
 source("analysis.R")
+source('loading.R')
 
 options(shiny.maxRequestSize=500*1024^2)
 dsnames <- c()
-
-# Read CSV into R
-#dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
-dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
-#recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
-#head(dsim)
+targetColumn <- c()
+numericColumns <- c()
+categoricalColumns <- c()
 
 ## mtcars data for sample scatter plot in D3
 d <- mtcars

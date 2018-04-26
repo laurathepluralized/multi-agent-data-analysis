@@ -16,10 +16,18 @@ library(ggplot2)
 library(shinydashboard)
 library(scatterD3)
 source("modeling.R")
+source("analysis.R")
+source("loading.R")
+source("stability.R")
 
-# Read CSV into R
+# Read Default CSV into R
+
+#I vote that we rename this to default_data
 dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
-#dsim <- read.csv('data/betterdata.csv', stringsAsFactors = FALSE, header=TRUE)
+default_data = dsim
+
+dsnames <- names(dsim)
+default_columns <- dsnames
 paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
@@ -45,8 +53,6 @@ threshold_line <- data.frame(slope = 0,
   stroke_width = 2,
   stroke_dasharray = "")
 
-dsnames <- c()
-
 ui <- dashboardPage(
   dashboardHeader(title="Multi-Robot Simulation Dashboard", titleWidth = 350),
   
@@ -56,6 +62,7 @@ ui <- dashboardPage(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
       menuItem("Main", tabName = "main", icon = icon("dashboard")),
+      menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
       menuItem("Scatter Plot", tabName = "scatter", icon = icon("bar-chart-o")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
@@ -67,85 +74,8 @@ ui <- dashboardPage(
   dashboardBody(
     tabItems(
       # First tab content
-      tabItem(tabName = "main",
-        fluidRow(
-          box(plotOutput("plot1", height = 250)),
-          
-          box(
-            title = "Controls",
-            sliderInput("slider", "Number of observations:", 1, 100, 50)
-          )
-        ),
-        fluidRow(
-          box (
-            # Input: Select a file ----
-            fileInput("file1", "Choose CSV File",
-              multiple = TRUE,
-              accept = c("text/csv",
-                "text/comma-separated-values,text/plain",
-                ".csv")
-            ),
-          
-            # These column selectors are dynamically created when the
-            # file is loaded
-            uiOutput("fromCol"),
-            uiOutput("toCol"),
-            uiOutput("amountflag"),
-            #The conditional panel is triggered by the preceding checkbox
-            conditionalPanel(
-              condition="input.amountflag==true",
-              uiOutput("amountCol")
-            ),
-            
-            # Horizontal line ----
-            tags$hr(),
-            
-            # Input: Checkbox if file has header ----
-            checkboxInput("header", "Header", TRUE),
-            
-            # Input: Select separator ----
-            radioButtons("sep", "Separator",
-              choices = c(Comma = ",",
-                Semicolon = ";",
-                Tab = "\t"),
-              selected = ","),
-            
-            # Input: Select quotes ----
-            radioButtons("quote", "Quote",
-              choices = c(None = "",
-                "Double Quote" = '"',
-                "Single Quote" = "'"),
-              selected = '"'),
-            
-            # Horizontal line ----
-            tags$hr(),
-            
-            # Input: Select number of rows to display ----
-            radioButtons("disp", "Display",
-              choices = c(Head = "head",
-                All = "all"),
-              selected = "head"),
-            checkboxGroupInput("inCheckboxGroup",
-              "Checkbox group input:",
-              c("label 1" = "option1",
-              "label 2" = "option2")),
-            uiOutput("choose_columns")
-            
-                      
-          ),
-          box(
-            tableOutput("contents")
-          )
-        ),
-        fluidRow(
-          box(
-            title = "Stability Analysis",
-            tableOutput("stabilityAnalysis"),
-            width = 12
-          )
-          
-        )
-      ),
+      tabItem(tabName = "main", loading_ui(), preview_ui()),
+      tabItem(tabName = "stability", stabilityAnalysisUI("stability", "Stability Analysis")),
       # Second tab content
       tabItem(tabName = "widgets",
         h2("Using k-means clustering"),
@@ -189,151 +119,21 @@ ui <- dashboardPage(
 
 
 server <- function(input, output, session) {
+  session$userData$data_file <- default_data
+  session$userData$columnNames <- default_columns
+  session$userData$testText <- "using default data"
+  
+  handle_loading(input, output, session)
+  callModule(stabilityAnalysis, "stability", stringsAsFactors = FALSE)
 
-  ## output table for file contents (Main)
-  output$contents <- renderTable({
-  
-  # input$file1 will be NULL initially. After the user selects
-  # and uploads a file, head of that data file by default,
-  # or all rows if selected, will be shown.
-  
-  req(input$file1)
-  
-  df <- read.csv(input$file1$datapath,
-    header = input$header,
-    sep = input$sep,
-    quote = input$quote)
-  
-  
-  if(input$disp == "head") {
-    return(head(df))
-  }
-  else {
-    return(df)
-  }
-    
-  })
-
-  #This function is responsible for loading in the selected file
-  filedata <- reactive ({
-  req(input$file1)
-  infile <- input$file1
-  if (is.null(infile)) {
-    # User has not uploaded a file yet
-    return(NULL)
-  }
-  read.csv(infile$datapath)
-  })
-
-  observe ({
-  req(input$file1)
-  dsnames <- names(filedata())
-  cb_options <- list()
-  cb_options[ dsnames] <- dsnames
-  updateCheckboxGroupInput(session, "inCheckboxGroup",
-    label = "Check Box Group",
-    choices = cb_options,
-    selected = "")
-  })
-  
-  #The following set of functions populate the column selectors
-  output$toCol <- renderUI ({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  
-  items=names(df)
-  names(items)=items
-  selectInput("to", "To:",items)
-  
-  })
-  
-  output$fromCol <- renderUI ({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  
-  items=names(df)
-  names(items)=items
-  selectInput("from", "From:",items)
-  
-  })
-  
-  #The checkbox selector is used to determine whether we want an optional column
-  output$amountflag <- renderUI ({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  
-  checkboxInput("amountflag", "Use values?", FALSE)
-  })
-  
-  #If we do want the optional column, this is where it gets created
-  output$amountCol <- renderUI({
-  df <-filedata()
-  if (is.null(df)) return(NULL)
-  #Let's only show numeric columns
-  nums <- sapply(df, is.numeric)
-  items=names(nums[nums])
-  names(items)=items
-  selectInput("amount", "Amount:",items)
-  })
   
   #This previews the CSV data file
   #output$filetable <- renderTable ({
   #  filedata()
   #})
   
-  ## render table for stability analysis 
-  ## data for stability analysis
-  stabilityData <- reactive ({
-  filedata()
-  if (is.null(filedata())) return(NULL)
-  })
   
-  stabilityOutput <- reactive ({
-  result_col = "NonTeamCapture"
-  numericCol <- c("vel_max_t_1",
-    "vel_max_predator",
-    "pitch_rate_max_predator",
-    "turn_rate_max_predator")
-  categoryCol <- c("team_id",
-    "allow_prey_switching_t_2_predator")
-  runStablilityCheck(stabilityData(), result_col, numericCol, categoryCol)
-  
-  })
-  
-  output$stabilityAnalysis <- renderTable ({
-  stabilityOutput()
-  })
-#   output$stabilityAnalysis <- renderTable ({
-#     # input$file1 will be NULL initially. After the user selects
-#     # and uploads a file, head of that data file by default,
-#     # or all rows if selected, will be shown.
-#   
-#     if(input$runStability) {
-#       req(input$file1)
-#     
-#       df <- read.csv(input$file1$datapath,
-#         header = input$header,
-#         sep = input$sep,
-#         quote = input$quote)
-#     
-#       result_col <- input$result_col
-#       numericCol <- c("vel_max.t.1",
-#         "vel_max.predator",
-#         "pitch_rate_max.predator",
-#         "turn_rate_max.predator")
-#       categoryCol <- c("team_id",
-#         "allow_prey_switching.t.2.predator")
-#     
-#       stabilityResults <- runStablilityCheck(df, result_col, numericCol, categoryCol)
-#    
-#       return(stabilityResults)
-#  }
-#  
-#  return (c(0,0))
-#  }
-#  )
-  
-  
+
   ## output text message for sidebar selection
   output$res <- renderText({
   paste("You've selected:", input$tabs)
