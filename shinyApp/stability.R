@@ -14,6 +14,15 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
       box(
         selectInput(ns('theTargetParam'), 'Select the target param', c("placeholder", "placeholder1")),
         actionButton(ns("runStab"), "Run Stability Analysis")
+      ),
+      verbatimTextOutput(ns("placeHolder"))
+      
+    ),
+    fluidRow(
+      box(
+        title = "Stability Analysis",
+        tableOutput(ns("stabilityAnalysisResult")),
+        width = 12
       )
       
     )
@@ -23,15 +32,39 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
 
 stabilityAnalysis <- function(input, output, session, stringsAsFactors){
   
-  observeEvent(input$runStab, {
-    cat(file=stderr(), "running stability analysis with: ", session$userData$testText)
+  output$placeHolder <- renderText({
+    cb_options <- list()
+    cb_options[ session$userData$columnNames ] <- session$userData$columnNames
+    updateCheckboxGroupInput(session, "stabilityCategorical",
+                             label = "Select Pertinent Categorical Variables",
+                             choices = cb_options,
+                             selected = "")
+    updateCheckboxGroupInput(session, "stabilityNumeric",
+                             label = "Select Pertinent Numeric Variables",
+                             choices = cb_options,
+                             selected = "")
+    updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
+    
+    paste(sep = "",
+          "protocol: ", session$clientData$url_protocol, "\n",
+          "hostname: ", session$clientData$url_hostname, "\n",
+          "pathname: ", session$clientData$url_pathname, "\n",
+          "port: ",     session$clientData$url_port,     "\n",
+          "search: ",   session$clientData$url_search,   "\n"
+    )
   })
   
-  ## render table for stability analysis 
-  ## data for stability analysis
-  stabilityData <- reactive ({
-    filedata()
-    if (is.null(filedata())) return(NULL)
+  observeEvent(input$runStab, {
+    cat(file=stderr(), "\nrunning stability analysis with: ", session$userData$testText)
+    cat(file=stderr(), "\nrunning stability analysis with target val of : ", input$theTargetParam)
+    cat(file=stderr(), "\nrunning stability analysis with stabilityCategorical: ", input$stabilityCategorical)
+    cat(file=stderr(), "\nrunning stability analysis with stabilityNumeric: ", input$stabilityNumeric)
+    
+    stabilityResultIntermed <- runStablilityCheck(session$userData$data_file, input$theTargetParam, input$stabilityNumeric, input$stabilityCategorical)
+    print(stabilityResultIntermed)
+    output$stabilityAnalysisResult <- renderTable (
+      stabilityResultIntermed
+    )
   })
   
   stabilityOutput <- reactive ({
@@ -42,12 +75,10 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
                     "turn_rate_max_predator")
     categoryCol <- c("team_id",
                      "allow_prey_switching_t_2_predator")
-    runStablilityCheck(session$userData$data_file, result_col, numericCol, categoryCol)
+    # runStablilityCheck(session$userData$data_file, result_col, numericCol, categoryCol)
     
   })
   
-  output$stabilityAnalysis <- renderTable ({
-    stabilityOutput()
-  })
+  
 
 }

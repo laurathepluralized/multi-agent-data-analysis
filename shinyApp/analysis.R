@@ -54,7 +54,7 @@ runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   
 }
 
-runStablilityCheck <- function(data, result_col, numericCols, categoryCols) {
+runStablilityCheck <- function(data2, result_col, numericCols, categoryCols) {
   numericCol <- numericCols
   categoryCol <- categoryCols
   colnames(data2)[colnames(data2) == result_col] <- 'result'

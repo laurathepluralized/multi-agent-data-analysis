@@ -19,6 +19,7 @@ source("modeling.R")
 source("analysis.R")
 source("loading.R")
 source("stability.R")
+source("correlation_analysis.R")
 
 # Read Default CSV into R
 
@@ -28,9 +29,10 @@ dsim <- read.csv(file="data/default_data.csv", header=TRUE, sep=",")
 default_data = dsim
 
 dsnames <- names(dsim)
-default_columns <- dsnames
-# paramcols <- c('turn_rate_max_t_1','max_speed_t_2_predator','allow_prey_switching_t_2_predator')
-paramcols <- c('max_speed_t_2_predator','turn_rate_max_t_1','allow_prey_switching_t_2_predator')
+
+default_columns <- dsnames[order(dsnames)]
+paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_predator')
+
 metriccols <- c('NonTeamCapture')
 
 # These are the types of modeling we can use in the modeling tab
@@ -63,8 +65,14 @@ ui <- dashboardPage(
     sidebarMenu(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
+<<<<<<< HEAD
       menuItem("Main", tabName = "main", icon = icon("caret-up")),
       menuItem("Stability Analysis", tabName = "stability", icon = icon("th")),
+=======
+      menuItem("Main", tabName = "main", icon = icon("dashboard")),
+      menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
+      menuItem("Correlation", tabName = "correlationtab", icon = icon("bar-chart-o")),
+>>>>>>> masterWithCsv
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
       menuItem("Scatter Plot", tabName = "scatter", icon = icon("sliders")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
@@ -78,6 +86,7 @@ ui <- dashboardPage(
       # First tab content
       tabItem(tabName = "main", loading_ui(), preview_ui()),
       tabItem(tabName = "stability", stabilityAnalysisUI("stability", "Stability Analysis")),
+      tabItem(tabName = "correlationtab",correlationAnalysisUI("correTab", "Correlation Analysis")),
       # Second tab content
       tabItem(tabName = "widgets",
         h2("Using k-means clustering"),
@@ -169,6 +178,7 @@ server <- function(input, output, session) {
   
   handle_loading(input, output, session)
   callModule(stabilityAnalysis, "stability", stringsAsFactors = FALSE)
+  callModule(correlationAnalysis, "correTab", stringsAsFactors = FALSE)
 
   
   #This previews the CSV data file
