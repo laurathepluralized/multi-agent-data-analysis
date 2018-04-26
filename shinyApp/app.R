@@ -327,22 +327,26 @@ server <- function(input, output, session) {
           to_plot = tempdf2
         }
       }
-      if (is.numeric(dsim[,input$theparamx][1])) {
-        plot(to_plot[ c(input$theparamx, input$themetricy)])
-        plotIsScatter <- TRUE
-      } else {
-        x = (to_plot[, c(input$theparamx)])
-        y = (to_plot[, c(input$themetricy)])
-        boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
-        plotIsScatter <- FALSE
+      if (NROW(to_plot) > 0) {
+        if (is.numeric(dsim[,input$theparamx][1])) {
+          plot(to_plot[ c(input$theparamx, input$themetricy)])
+          plotIsScatter <- TRUE
+        } else {
+          x = (to_plot[, c(input$theparamx)])
+          y = (to_plot[, c(input$themetricy)])
+          boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
+          plotIsScatter <- FALSE
+        }
       }
 
-    output$info_scatter <- renderPrint({
-      # With base graphics, need to tell it what the x and y variables are.
-      # Max of 10, otherwise we overload the user
-      points <- brushedPoints(to_plot, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
-      head(points, 10)
-    })
+      if (NROW(to_plot) > 0) {
+        output$info_scatter <- renderPrint({
+          # With base graphics, need to tell it what the x and y variables are.
+          # Max of 10, otherwise we overload the user
+          points <- brushedPoints(to_plot, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
+          head(points, 10)
+        })
+      }
     }
   })
   
