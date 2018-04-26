@@ -23,12 +23,13 @@ source("stability.R")
 # Read Default CSV into R
 
 #I vote that we rename this to default_data
-dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
+# dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
+dsim <- read.csv(file="data/pred-prey-lhs-small.csv", header=TRUE, sep=",")
 default_data = dsim
 
 dsnames <- names(dsim)
 default_columns <- dsnames
-paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_predator')
+paramcols <- c('turn_rate_max_t_1','max_speed_t_2_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
 # These are the types of modeling we can use in the modeling tab
@@ -113,16 +114,16 @@ ui <- dashboardPage(
           box(
             selectInput('xcol', 'X Variable', names(dsim)),
             selectInput('ycol', 'Y Variable', names(dsim),
-                  selected = names(dsim)[[12]]),
+              selected = names(dsim)[[12]]),
             numericInput('clusters', 'Cluster count', 3,
                    min = 1, max = 9)
           ),
           box(
             plotOutput('plot2',
-                 click = "plot_click",
-                 dblclick = "plot_dblclick",
-                 hover = "plot_hover",
-                 brush = "plot_brush"
+              click = "plot_click",
+              dblclick = "plot_dblclick",
+              hover = "plot_hover",
+              brush = "plot_brush"
             ),
             verbatimTextOutput("info")
           )
@@ -139,11 +140,21 @@ ui <- dashboardPage(
       #3rd tab content
       tabItem(tabName="scatter",
         h2("Interactive Scatterplot"),
-        selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
-        selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols])),
-        uiOutput('valuefixers'),
-        plotOutput("plot_scatter", click = "plot_click", brush = "plot_brush"),
-        verbatimTextOutput("info_scatter")
+        fluidRow(
+          box(
+            selectInput('theparamx', 'Select parameter to plot on x-axis', names(dsim[paramcols])),
+            selectInput('themetricy', 'Select metric to plot on y-axis', names(dsim[metriccols]))
+          ),
+          box(
+            uiOutput('valuefixers')
+          )
+        ),
+        fluidRow(
+          box(
+            plotOutput("plot_scatter", click = "plot_click", brush = "plot_brush")
+          ),
+          verbatimTextOutput("info_scatter")
+        )
       )
     )
   )
@@ -264,13 +275,14 @@ server <- function(input, output, session) {
       # only make a variable-fixing element if this isn't the x-axis var
       if (inname != input$theparamx) {
         if (is.numeric(thevals[,1])) {
-          themin = min(thevals)
-          themax = max(thevals)
+          themin = min(thevals[,1])
+          themax = max(thevals[,1])
           stepsize <- NULL
           uniquevals <- unique(thevals[,1])
           if (length(uniquevals) > 1) {
             stepsize <- uniquevals[2] - uniquevals[1]
           }
+          browser()
           sliderInput(inname,
           paste('Select fixed value for ', inname), min=themin,
           max=themax, value=c(themin, themax), step = stepsize, round = -2)
@@ -290,20 +302,22 @@ server <- function(input, output, session) {
   output$plot_scatter<- renderPlot({
     data = dsim 
     to_plot = data
-    for (i in 1:length(variables$not_to_plot_params)) {
-      param = variables$not_to_plot_params[i]
-      to_plot = to_plot[which(to_plot[param] == input[[param]]),]
+    if (!is.null(to_plot)) {
+      for (i in 1:length(variables$not_to_plot_params)) {
+        param = variables$not_to_plot_params[i]
+        to_plot = to_plot[which(to_plot[param] == input[[param]]),]
+      }
+      if (is.numeric(dsim[,input$theparamx][1])) {
+          plot(to_plot[ c(input$theparamx, input$themetricy)])
+          plotIsScatter <- TRUE
+      } else {
+          x = (to_plot[, c(input$theparamx)])
+          y = (to_plot[, c(input$themetricy)])
+          boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
+          plotIsScatter <- FALSE
+      }
     }
-    if (is.numeric(dsim[,input$theparamx][1])) {
-        plot(to_plot[ c(input$theparamx, input$themetricy)])
-        plotIsScatter <- TRUE
-    } else {
-        x = (to_plot[, c(input$theparamx)])
-        y = (to_plot[, c(input$themetricy)])
-        boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
-        plotIsScatter <- FALSE
-    }
-    plot(to_plot[, c(input$theparamx, input$themetricy)])
+    # plot(to_plot[, c(input$theparamx, input$themetricy)])
   })
 
   output$info_scatter <- renderPrint({
