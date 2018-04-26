@@ -18,6 +18,7 @@ library(scatterD3)
 source("modeling.R")
 source("analysis.R")
 source("loading.R")
+source("stability.R")
 
 # Read CSV into R
 dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
@@ -57,6 +58,7 @@ ui <- dashboardPage(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
       menuItem("Main", tabName = "main", icon = icon("dashboard")),
+      menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
       menuItem("Scatter Plot", tabName = "scatter", icon = icon("bar-chart-o")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
@@ -68,8 +70,8 @@ ui <- dashboardPage(
   dashboardBody(
     tabItems(
       # First tab content
-      tabItem(tabName = "main", loading_ui(), preview_ui()
-      ),
+      tabItem(tabName = "main", loading_ui(), preview_ui()),
+      tabItem(tabName = "stability", stabilityAnalysisUI("stability", "Stability Analysis")),
       # Second tab content
       tabItem(tabName = "widgets",
         h2("Using k-means clustering"),
@@ -115,6 +117,7 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
   
   handle_loading(input, output, session)
+  callModule(stabilityAnalysis, "stability", stringsAsFactors = FALSE)
 
   
   #This previews the CSV data file
@@ -122,28 +125,7 @@ server <- function(input, output, session) {
   #  filedata()
   #})
   
-  ## render table for stability analysis 
-  ## data for stability analysis
-  stabilityData <- reactive ({
-  filedata()
-  if (is.null(filedata())) return(NULL)
-  })
   
-  stabilityOutput <- reactive ({
-  result_col = "NonTeamCapture"
-  numericCol <- c("vel_max_t_1",
-    "vel_max_predator",
-    "pitch_rate_max_predator",
-    "turn_rate_max_predator")
-  categoryCol <- c("team_id",
-    "allow_prey_switching_t_2_predator")
-  runStablilityCheck(stabilityData(), result_col, numericCol, categoryCol)
-  
-  })
-  
-  output$stabilityAnalysis <- renderTable ({
-  stabilityOutput()
-  })
 
   ## output text message for sidebar selection
   output$res <- renderText({
