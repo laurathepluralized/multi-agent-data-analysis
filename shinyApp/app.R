@@ -65,14 +65,9 @@ ui <- dashboardPage(
     sidebarMenu(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
-<<<<<<< HEAD
       menuItem("Main", tabName = "main", icon = icon("caret-up")),
       menuItem("Stability Analysis", tabName = "stability", icon = icon("th")),
-=======
-      menuItem("Main", tabName = "main", icon = icon("dashboard")),
-      menuItem("Stability Analysis", tabName = "stability", icon = icon("dashboard")),
       menuItem("Correlation", tabName = "correlationtab", icon = icon("bar-chart-o")),
->>>>>>> masterWithCsv
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
       menuItem("Scatter Plot", tabName = "scatter", icon = icon("sliders")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
