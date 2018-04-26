@@ -33,7 +33,7 @@ metriccols <- c('NonTeamCapture')
 
 # These are the types of modeling we can use in the modeling tab
 models <- c('Multivariate linear regression',
-            'Linear regression with backward elimination',
+            'Linear regression with AIC',
             'Principal component regression (using PCA)',
             'Partial least squares',
             'Random Forest Regression',
@@ -270,9 +270,8 @@ server <- function(input, output, session) {
   # TODO: Get summaries and graphs working for all of the model types
   output$graph_modeling <- renderPlot({
     model = run_modeling(dsim, which(models == input$model_to_use))
-    par(mfrow=c(2,2))#drawing in 2 by 2 format
+    par(mfrow=c(2,2))
     plot(model,which=c(1:4), col = "cornflowerblue")
-    plot(model$fitted.values, model$residuals);
   })
 }
 shinyApp(ui = ui, server = server)

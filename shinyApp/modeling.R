@@ -69,51 +69,27 @@ test_set = subset(dataset, split == FALSE)
 
 # Fitting the model to the training set
 if (model_selection == 1) { # Multivarite linear regression model
+  
+  
   model = lm(formula = result ~., data = training_set)
   y_pred<- predict(model,test_set)
+  
 } else if(model_selection == 2) { # Linear regression with backward selection
   lmtest <- lm(result ~ . , data=training_set)
-  lmSummary <- summary(lmtest)
-  pValues <- t(coef(lmSummary)[,4])
-  varNames <- colnames(pValues)
-  NewVar <- c()
-  for(i in 2:length(varNames)){
-    if(pValues[i] < 0.05){
-      NewVar <- cbind(NewVar, varNames[i])
-    }
-  }
-  backward = length(varNames) - 1 - length(NewVar)
-  while(backward > 0){
-    backward = length(NewVar)
-    if(length(NewVar) > 0){
-      NextData <- training_set[, cbind("result", NewVar)]
-      lmtest2 <- lm(result ~ . , data=NextData)
-      lmSummary2 <- summary(lmtest2)
-      pValues <- t(coef(lmSummary2)[,4])
-      varNames <- colnames(pValues)
-      NewVar <- c()
-      for(i in 2:length(varNames)){
-        if(pValues[i] < 0.05){
-          NewVar <- cbind(NewVar, varNames[i])
-        }
-      }
-      backward = backward - length(NewVar)
-    }
-  }
-  
-  y_pred<- predict(lmtest2,test_set)
+  model <- step(lmtest)
+  y_pred<- predict(model,test_set)
   
 } else if (model_selection == 3) { # Principal component regresson
   require(pls)
   model = pcr(result~., data = training_set, ncomp=dim(training_set)[2]-1, validation="CV")
   pcrCV<- RMSEP(model,estimate = "CV")
-  plot(pcrCV, main(""))
+  #plot(pcrCV, main(""))
   param_num<-which.min(pcrCV$val)
   y_pred = predict(model,test_set,ncop = param_num)
 } else if (model_selection == 4) { # Partial least squares
   model = plsr(result~., data = training_set, ncomp = dim(training_set)[2]-1, validation ="CV")
   plsCV<- RMSEP(model, estimate = "CV")
-  plot(plsCV, main = "")
+  #plot(plsCV, main = "")
   param_num <- which.min(plsCV$val)
   y_pred = predict(model,test_set,ncomp = param_num)
 } else if (model_selection == 5) { # Random Forest Regression
