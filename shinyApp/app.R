@@ -20,8 +20,14 @@ source("analysis.R")
 source("loading.R")
 source("stability.R")
 
-# Read CSV into R
+# Read Default CSV into R
+
+#I vote that we rename this to default_data
 dsim <- read.csv(file="data/betterdata.csv", header=TRUE, sep=",")
+default_data = dsim
+
+dsnames <- names(dsim)
+default_columns <- dsnames
 paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
@@ -46,8 +52,6 @@ threshold_line <- data.frame(slope = 0,
   stroke = "#F67E7D",
   stroke_width = 2,
   stroke_dasharray = "")
-
-dsnames <- c()
 
 ui <- dashboardPage(
   dashboardHeader(title="Multi-Robot Simulation Dashboard", titleWidth = 350),
@@ -115,6 +119,9 @@ ui <- dashboardPage(
 
 
 server <- function(input, output, session) {
+  session$userData$data_file <- default_data
+  session$userData$columnNames <- default_columns
+  session$userData$testText <- "using default data"
   
   handle_loading(input, output, session)
   callModule(stabilityAnalysis, "stability", stringsAsFactors = FALSE)
