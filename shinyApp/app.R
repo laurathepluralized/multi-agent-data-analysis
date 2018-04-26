@@ -29,7 +29,8 @@ default_data = dsim
 
 dsnames <- names(dsim)
 default_columns <- dsnames
-paramcols <- c('turn_rate_max_t_1','max_speed_t_2_predator','allow_prey_switching_t_2_predator')
+# paramcols <- c('turn_rate_max_t_1','max_speed_t_2_predator','allow_prey_switching_t_2_predator')
+paramcols <- c('max_speed_t_2_predator','turn_rate_max_t_1','allow_prey_switching_t_2_predator')
 metriccols <- c('NonTeamCapture')
 
 # These are the types of modeling we can use in the modeling tab
@@ -119,7 +120,7 @@ ui <- dashboardPage(
                    min = 1, max = 9)
           ),
           box(
-            plotOutput('plot2',
+            plotOutput('kmeansplot',
               click = "plot_click",
               dblclick = "plot_dblclick",
               hover = "plot_hover",
@@ -222,7 +223,7 @@ server <- function(input, output, session) {
   kmeans(selectedData(), input$clusters)
   })
   
-  output$plot2 <- renderPlot({
+  output$kmeansplot <- renderPlot({
   par(mar = c(5.1, 4.1, 0, 1))
   plot(selectedData(),
     col = clusters()$cluster,
@@ -277,18 +278,17 @@ server <- function(input, output, session) {
         if (is.numeric(thevals[,1])) {
           themin = min(thevals[,1])
           themax = max(thevals[,1])
-          stepsize <- NULL
+          stepsize <- 0.1
           uniquevals <- unique(thevals[,1])
-          if (length(uniquevals) > 1) {
-            stepsize <- uniquevals[2] - uniquevals[1]
+          if (length(uniquevals) > 1 & length(uniquevals) < 10) {
+            stepsize <- round(uniquevals[2], digits=-2) - round(uniquevals[1], digits=-2)
           }
-          browser()
           sliderInput(inname,
           paste('Select fixed value for ', inname), min=themin,
           max=themax, value=c(themin, themax), step = stepsize, round = -2)
         }
         else {
-          pickvals <- unique(thevals)
+          pickvals <- unique(thevals[,1])
           selectInput(inname,
           paste('Select fixed value for ', inname), pickvals)
         }
@@ -302,29 +302,48 @@ server <- function(input, output, session) {
   output$plot_scatter<- renderPlot({
     data = dsim 
     to_plot = data
+    # we are only looking at team 2 right now; obviously remove this next line
+    # if your metrics cover multiple teams
+    # TODO: add an input to select this?
+    to_plot = to_plot[which(to_plot['team_id'] == 2),]
     if (!is.null(to_plot)) {
       for (i in 1:length(variables$not_to_plot_params)) {
         param = variables$not_to_plot_params[i]
-        to_plot = to_plot[which(to_plot[param] == input[[param]]),]
+        vals = input[[param]]
+        # If only one value is selected, make vals length 1 so it doesn't
+        # try to filter by range
+        if (length(vals) > 1) {
+          if (min(vals) == max(vals)) {
+            vals = min(vals)
+          }
+        }
+        if (length(vals) == 1) {
+          tempdf = to_plot[which(to_plot[param] == input[[param]]),]
+          to_plot = tempdf
+        } else if (length(vals) > 1) {
+          # I'm getting the feeling R doesn't like doing df stuff in-place
+          tempdf = to_plot[which(to_plot[param] >= min(vals)),]
+          tempdf2 = tempdf[which(tempdf[param] <= max(vals)),]
+          to_plot = tempdf2
+        }
       }
       if (is.numeric(dsim[,input$theparamx][1])) {
-          plot(to_plot[ c(input$theparamx, input$themetricy)])
-          plotIsScatter <- TRUE
+        plot(to_plot[ c(input$theparamx, input$themetricy)])
+        plotIsScatter <- TRUE
       } else {
-          x = (to_plot[, c(input$theparamx)])
-          y = (to_plot[, c(input$themetricy)])
-          boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
-          plotIsScatter <- FALSE
+        x = (to_plot[, c(input$theparamx)])
+        y = (to_plot[, c(input$themetricy)])
+        boxplot(y ~ x, xlab = input$theparamx, ylab = input$themetricy)
+        plotIsScatter <- FALSE
       }
-    }
-    # plot(to_plot[, c(input$theparamx, input$themetricy)])
-  })
 
-  output$info_scatter <- renderPrint({
-    # With base graphics, need to tell it what the x and y variables are.
-    # Max of 10, otherwise we overload the user
-    points <- brushedPoints(dsim, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
-    head(points, 10)
+    output$info_scatter <- renderPrint({
+      # With base graphics, need to tell it what the x and y variables are.
+      # Max of 10, otherwise we overload the user
+      points <- brushedPoints(to_plot, input$plot_brush, xvar = input$theparamx, yvar = input$themetricy)
+      head(points, 10)
+    })
+    }
   })
   
   #Leaving this as an output debugger that updates that we can look at
