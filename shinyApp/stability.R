@@ -17,6 +17,14 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
       ),
       verbatimTextOutput(ns("placeHolder"))
       
+    ),
+    fluidRow(
+      box(
+        title = "Stability Analysis",
+        tableOutput(ns("stabilityAnalysisResult")),
+        width = 12
+      )
+      
     )
     
   )
@@ -52,7 +60,11 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
     cat(file=stderr(), "\nrunning stability analysis with stabilityCategorical: ", input$stabilityCategorical)
     cat(file=stderr(), "\nrunning stability analysis with stabilityNumeric: ", input$stabilityNumeric)
     
-    runStablilityCheck(session$userData$data_file, result_col, numericCol, categoryCol)
+    stabilityResultIntermed <- runStablilityCheck(session$userData$data_file, input$theTargetParam, input$stabilityNumeric, input$stabilityCategorical)
+    print(stabilityResultIntermed)
+    output$stabilityAnalysisResult <- renderTable (
+      stabilityResultIntermed
+    )
   })
   
   stabilityOutput <- reactive ({
@@ -67,8 +79,6 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
     
   })
   
-  output$stabilityAnalysis <- renderTable ({
-    stabilityOutput()
-  })
+  
 
 }
