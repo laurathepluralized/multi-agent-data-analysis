@@ -9,7 +9,6 @@ library(data.table)
 library(ggplot2)
 library(randomForest)
 
-library(corrplot)
 
 runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   numericCol <- numericCols

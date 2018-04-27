@@ -62,7 +62,7 @@ correlationAnalysis <- function(input, output, session, stringsAsFactors) {
     print(correlationResultIntermed)
 
     output$correlation <- renderPlot({
-      corrplot(correlationResultIntermed, method="circle")
+      corrplot::corrplot(correlationResultIntermed, method="circle")
     })
   })
 }

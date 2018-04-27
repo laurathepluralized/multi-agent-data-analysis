@@ -19,12 +19,12 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
       
     ),
     fluidRow(
-      box(
-        title = "Stability Analysis",
-        tableOutput(ns("stabilityAnalysisResult")),
-        width = 12
+      box(width=12,
+          title = "Stability Analysis",
+          column(12,
+                 div(style = 'overflow-x: scroll', dataTableOutput(ns('stabilityAnalysisResult')))
+          )
       )
-      
     )
     
   )
@@ -62,7 +62,7 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
     
     stabilityResultIntermed <- runStablilityCheck(session$userData$data_file, input$theTargetParam, input$stabilityNumeric, input$stabilityCategorical)
     print(stabilityResultIntermed)
-    output$stabilityAnalysisResult <- renderTable (
+    output$stabilityAnalysisResult <- renderDataTable (
       stabilityResultIntermed
     )
   })
