@@ -66,7 +66,7 @@ ui <- dashboardPage(
     sidebarMenu(
       # Setting id makes input$tabs give the tabName of currently-selected tab
       id = "tabs",
-      menuItem("Main", tabName = "main", icon = icon("caret-up")),
+      menuItem("Main", tabName = "main", icon = icon("bars")),
       menuItem("Stability Analysis", tabName = "stability", icon = icon("th")),
       menuItem("Correlation", tabName = "correlationtab", icon = icon("bar-chart-o")),
       menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
