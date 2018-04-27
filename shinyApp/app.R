@@ -24,7 +24,6 @@ source("correlation_analysis.R")
 
 # Read Default CSV into R
 
-#I vote that we rename this to default_data
 dsim <- read.csv(file="data/default_data.csv", header=TRUE, sep=",")
 # dsim <- read.csv(file="data/pred-prey-lhs-small.csv", header=TRUE, sep=",")
 default_data = dsim
@@ -32,7 +31,7 @@ default_data = dsim
 dsnames <- names(dsim)
 
 default_columns <- dsnames[order(dsnames)]
-paramcols <- c('turn_rate_max_t_1','vel_max_predator','allow_prey_switching_t_2_predator')
+paramcols <- c('turn_rate_max_t_1','max_speed_t_2_predator','allow_prey_switching_t_2_predator')
 
 metriccols <- c('NonTeamCapture')
 
@@ -69,7 +68,7 @@ ui <- dashboardPage(
       menuItem("Main", tabName = "main", icon = icon("bars")),
       menuItem("Stability Analysis", tabName = "stability", icon = icon("th")),
       menuItem("Correlation", tabName = "correlationtab", icon = icon("bar-chart-o")),
-      menuItem("Widgets", tabName = "widgets", icon = icon("bar-chart-o")),
+      menuItem("Clustering", tabName = "clustering", icon = icon("bar-chart-o")),
       menuItem("Scatter Plot", tabName = "scatter", icon = icon("sliders")),
       menuItem("Modeling", tabName = "modeling", icon = icon("calculator"))
     ),
@@ -84,7 +83,7 @@ ui <- dashboardPage(
       tabItem(tabName = "stability", stabilityAnalysisUI("stability", "Stability Analysis")),
       tabItem(tabName = "correlationtab",correlationAnalysisUI("correTab", "Correlation Analysis")),
       # Second tab content
-      tabItem(tabName = "widgets",
+      tabItem(tabName = "clustering",
         h2("Using k-means clustering"),
 # The following code between the lines beginning with # --- was heavily based
 # on the kmeans-example code at this repo:
@@ -219,7 +218,7 @@ server <- function(input, output, session) {
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-  ## output plot for multi-robot simulation data (Widgets)
+  ## output plot for multi-robot simulation data (clustering)
   ## data for k-means cluster - dsim
   selectedData <- reactive({
   dsim[, c(input$xcol, input$ycol)]
@@ -238,7 +237,7 @@ server <- function(input, output, session) {
   points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
   })
   
-  ## output text info box for plot click, hover etc. (Widgets)
+  ## output text info box for plot click, hover etc. (clustering)
   output$info <- renderText({
   xy_str <- function(e) {
     if(is.null(e)) return("NULL\n")
