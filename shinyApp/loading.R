@@ -70,7 +70,7 @@ populate_session_columns <- function(session){
   #generate and store numeric column options
   numericColOptions <- dsnames[sapply(session$userData$data_file, is.numeric)]
   print(c(">numericColOptions:", numericColOptions))
-  session$userData$columnNamesNumeric <- reactiveVal(numericColOptions)
+  session$userData$columnNamesNumeric <- numericColOptions
   
   
   #generate and store categorical column options (integer and non numeric)
