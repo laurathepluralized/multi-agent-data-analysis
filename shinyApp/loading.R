@@ -78,7 +78,7 @@ populate_session_columns <- function(session){
   integerColOptions <- dsnames[sapply(session$userData$data_file, isInteger)]
   
   categoricalColOptions <- append(nonNumericColOptions, integerColOptions)
-  session$userData$columnNamesCategoric <- categoricalColOptions
+  session$userData$columnNamesCategoric(categoricalColOptions)
   
   print(c("columnNamesCategoric: ", session$userData$columnNamesCategoric ))
 }

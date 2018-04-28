@@ -33,9 +33,9 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
 stabilityAnalysis <- function(input, output, session, stringsAsFactors){
   
   output$placeHolder <- renderText({
-    print(c(">stabilityAnalyCat:", session$userData$columnNamesCategoric))
+    print(c(">stabilityAnalyCat:", session$userData$columnNamesCategoric()))
     cb_categorical_options <- list()
-    cb_categorical_options[ session$userData$columnNamesCategoric ] <- session$userData$columnNamesCategoric
+    cb_categorical_options[ session$userData$columnNamesCategoric() ] <- session$userData$columnNamesCategoric()
     updateCheckboxGroupInput(session, "stabilityCategorical",
                              label = "Select Pertinent Categorical Variables",
                              choices = cb_categorical_options,
