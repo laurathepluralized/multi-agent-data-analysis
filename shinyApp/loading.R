@@ -68,14 +68,14 @@ populate_session_columns <- function(session){
   print("loading column info")
   #print(session$userData$data_file)
   dsnames <- names(session$userData$data_file)
-  print(c(">dsnames: ", dsnames))
+  #print(c(">dsnames: ", dsnames))
   session$userData$columnNames <- dsnames[order(dsnames)]
-  print(c(">session col names", session$userData$columnNames))
+  #print(c(">session col names", session$userData$columnNames))
   
   #generate and store numeric column options
   numericColOptions <- dsnames[sapply(session$userData$data_file, is.numeric)]
-  print(c(">numericColOptions:", numericColOptions))
-  session$userData$columnNamesNumeric(numericColOptions)
+  #print(c(">numericColOptions:", numericColOptions))
+  session$userData$columnNamesNumeric(numericColOptions[order(numericColOptions)])
   
   
   #generate and store categorical column options (integer and non numeric)
@@ -83,9 +83,9 @@ populate_session_columns <- function(session){
   integerColOptions <- dsnames[sapply(session$userData$data_file, isInteger)]
   
   categoricalColOptions <- append(nonNumericColOptions, integerColOptions)
-  session$userData$columnNamesCategoric(categoricalColOptions)
+  session$userData$columnNamesCategoric(categoricalColOptions[order(categoricalColOptions)])
   
-  print(c("columnNamesCategoric: ", session$userData$columnNamesCategoric ))
+  #print(c("columnNamesCategoric: ", session$userData$columnNamesCategoric ))
 }
 
 filedata_hp <- function(input){
