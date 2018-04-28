@@ -1,6 +1,19 @@
 library(shiny)
 library(shinydashboard)
 
+isInteger <- function(number){
+  if(is.factor(number[1])) {
+    return (FALSE)
+  } else {
+    if(is.numeric(number[1])){
+      return (number[1]%%1==0)
+    } else {
+      return (FALSE)
+    }
+      
+  }
+}
+
 handle_loading <- function(input, output, session) {
   cat(file=stderr(), "handle loading")
   return(
@@ -18,20 +31,21 @@ handle_loading <- function(input, output, session) {
                                     sep = input$loading_hp_data_file_sep,
                                     quote = input$loading_hp_data_file_quote)
       
-      dsnames <- names(session$userData$data_file)
-      cat(file=stderr(), "options: ", dsnames)
+      populate_session_columns(session)
+      
+      session$userData$testText <- "testText"
+      
+      
+      
+      cat(file=stderr(), "options: ", session$userData$columnNames)
       cb_options <- list()
-      cb_options[ dsnames] <- dsnames
+      cb_options[ session$userData$columnNames] <- session$userData$columnNames
       updateCheckboxGroupInput(session, "loading_hp_data_file_headers",
                                label = "Check Box Group",
                                choices = cb_options,
                                selected = "")
       
       updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
-      
-      session$userData$columnNames <- dsnames[order(dsnames)]
-      
-      session$userData$testText <- "testText"
       
       if(input$loading_hp_data_file_disp == "head") {
         return(head(session$userData$data_file))
@@ -43,6 +57,22 @@ handle_loading <- function(input, output, session) {
     })
     
   )
+}
+
+populate_session_columns <- function(session){
+  dsnames <- names(session$userData$data_file)
+  session$userData$columnNames <- dsnames[order(dsnames)]
+  
+  #generate and store numeric column options
+  numericColOptions <- names(dsnames)[sapply(dsnames, is.numeric)]
+  session$userData$columnNamesNumeric <- numericColOptions
+  
+  #generate and store categorical column options (integer and non numeric)
+  nonNumericColOptions <- names(dsnames)[!sapply(dsnames, is.numeric)]
+  integerColOptions <- names(dsnames)[sapply(dsnames, isInteger)]
+  
+  categoricalColOptions <- append(nonNumericColOptions, integerColOptions)
+  session$userData$columnNamesCategoric <- categoricalColOptions
 }
 
 filedata_hp <- function(input){
