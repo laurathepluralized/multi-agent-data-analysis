@@ -66,18 +66,4 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
       stabilityResultIntermed
     )
   })
-  
-  stabilityOutput <- reactive ({
-    result_col = "NonTeamCapture"
-    numericCol <- c("turn_rate_max_t_1",
-                    "max_speed_t_2_predator",
-                    "allow_prey_switching_t_2_predator")
-    categoryCol <- c("team_id",
-                     "allow_prey_switching_t_2_predator")
-    # runStablilityCheck(session$userData$data_file, result_col, numericCol, categoryCol)
-    
-  })
-  
-  
-
 }
