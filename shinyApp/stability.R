@@ -41,9 +41,9 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
                              choices = cb_categorical_options,
                              selected = "")
     
-    print(c(">stabilityAnalyNum:",session$userData$columnNamesNumeric))
+    print(c(">stabilityAnalyNum:",session$userData$columnNamesNumeric()))
     cb_numerical_options <- list()
-    cb_numerical_options[ session$userData$columnNamesNumeric ] <- session$userData$columnNamesNumeric
+    cb_numerical_options[ session$userData$columnNamesNumeric() ] <- session$userData$columnNamesNumeric()
     updateCheckboxGroupInput(session, "stabilityNumeric",
                              label = "Select Pertinent Numeric Variables",
                              choices = cb_numerical_options,

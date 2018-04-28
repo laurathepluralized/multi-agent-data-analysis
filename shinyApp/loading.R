@@ -59,6 +59,11 @@ isInteger <- function(number){
   }
 }
 
+initialize_session_columns <- function(session){
+  session$userData$columnNamesCategoric <- reactiveVal()
+  session$userData$columnNamesNumeric <- reactiveVal()
+}
+
 populate_session_columns <- function(session){
   print("loading column info")
   #print(session$userData$data_file)
@@ -70,7 +75,7 @@ populate_session_columns <- function(session){
   #generate and store numeric column options
   numericColOptions <- dsnames[sapply(session$userData$data_file, is.numeric)]
   print(c(">numericColOptions:", numericColOptions))
-  session$userData$columnNamesNumeric <- numericColOptions
+  session$userData$columnNamesNumeric(numericColOptions)
   
   
   #generate and store categorical column options (integer and non numeric)

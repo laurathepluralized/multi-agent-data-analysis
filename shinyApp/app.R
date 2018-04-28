@@ -168,7 +168,7 @@ ui <- dashboardPage(
 
 server <- function(input, output, session) {
   session$userData$data_file <- default_data
-  session$userData$columnNamesCategoric <- reactiveVal()
+  initialize_session_columns(session)
   populate_session_columns(session)
   session$userData$testText <- "using default data"
   
