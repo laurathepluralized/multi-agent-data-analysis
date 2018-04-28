@@ -20,7 +20,7 @@ runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   categoryCol <- categoryCols
   
   ##read useful varaibles only (specified above)
-  mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
+  mydata <- cbind(data$result, data[append(numericCol , categoryCol)])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
   ##Clean missing data
