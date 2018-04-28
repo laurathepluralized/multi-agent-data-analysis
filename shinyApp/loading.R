@@ -1,19 +1,6 @@
 library(shiny)
 library(shinydashboard)
 
-isInteger <- function(number){
-  if(is.factor(number[1])) {
-    return (FALSE)
-  } else {
-    if(is.numeric(number[1])){
-      return (number[1]%%1==0)
-    } else {
-      return (FALSE)
-    }
-      
-  }
-}
-
 handle_loading <- function(input, output, session) {
   cat(file=stderr(), "handle loading")
   return(
@@ -59,20 +46,41 @@ handle_loading <- function(input, output, session) {
   )
 }
 
+isInteger <- function(number){
+  if(is.factor(number[1])) {
+    return (FALSE)
+  } else {
+    if(is.numeric(number[1])){
+      return (number[1]%%1==0)
+    } else {
+      return (FALSE)
+    }
+    
+  }
+}
+
 populate_session_columns <- function(session){
+  print("loading column info")
+  #print(session$userData$data_file)
   dsnames <- names(session$userData$data_file)
+  print(c(">dsnames: ", dsnames))
   session$userData$columnNames <- dsnames[order(dsnames)]
+  print(c(">session col names", session$userData$columnNames))
   
   #generate and store numeric column options
-  numericColOptions <- names(dsnames)[sapply(dsnames, is.numeric)]
-  session$userData$columnNamesNumeric <- numericColOptions
+  numericColOptions <- dsnames[sapply(session$userData$data_file, is.numeric)]
+  print(c(">numericColOptions:", numericColOptions))
+  session$userData$columnNamesNumeric <- reactiveVal(numericColOptions)
+  
   
   #generate and store categorical column options (integer and non numeric)
-  nonNumericColOptions <- names(dsnames)[!sapply(dsnames, is.numeric)]
-  integerColOptions <- names(dsnames)[sapply(dsnames, isInteger)]
+  nonNumericColOptions <- dsnames[!sapply(session$userData$data_file, is.numeric)]
+  integerColOptions <- dsnames[sapply(session$userData$data_file, isInteger)]
   
   categoricalColOptions <- append(nonNumericColOptions, integerColOptions)
   session$userData$columnNamesCategoric <- categoricalColOptions
+  
+  print(c("columnNamesCategoric: ", session$userData$columnNamesCategoric ))
 }
 
 filedata_hp <- function(input){

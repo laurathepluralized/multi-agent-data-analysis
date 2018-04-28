@@ -8,7 +8,7 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
                              c("Column names will show up" = "option1",
                                "here post file load" = "option2"))),
       box(checkboxGroupInput(ns("stabilityNumeric"),
-                             "Select Pertinent Categorical Variables",
+                             "Select Pertinent Numeric Variables",
                              c("Column names will show up" = "option1",
                                "here post file load" = "option2"))),
       box(
@@ -33,16 +33,24 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
 stabilityAnalysis <- function(input, output, session, stringsAsFactors){
   
   output$placeHolder <- renderText({
-    cb_options <- list()
-    cb_options[ session$userData$columnNames ] <- session$userData$columnNames
+    print(c(">stabilityAnalyCat:", session$userData$columnNamesCategoric))
+    cb_categorical_options <- list()
+    cb_categorical_options[ session$userData$columnNamesCategoric ] <- session$userData$columnNamesCategoric
     updateCheckboxGroupInput(session, "stabilityCategorical",
                              label = "Select Pertinent Categorical Variables",
-                             choices = cb_options,
+                             choices = cb_categorical_options,
                              selected = "")
+    
+    print(c(">stabilityAnalyNum:",session$userData$columnNamesNumeric()))
+    cb_numerical_options <- list()
+    cb_numerical_options[ session$userData$columnNamesNumeric() ] <- session$userData$columnNamesNumeric()
     updateCheckboxGroupInput(session, "stabilityNumeric",
                              label = "Select Pertinent Numeric Variables",
-                             choices = cb_options,
+                             choices = cb_numerical_options,
                              selected = "")
+    
+    cb_options <- list()
+    cb_options[ session$userData$columnNames ] <- session$userData$columnNames
     updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
     
     paste(sep = "",
