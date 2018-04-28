@@ -26,18 +26,18 @@ The Shiny application depends upon a number of R libraries.
 To install these dependencies, after installing R, execute the following in the
 R console:
 
-    > install.packages(c("shiny",
-      "shinydashboard",
-      "ggplot2",
-      "scatterD3",
-      "data.table",
-      "sqldf",
-      "dplyr",
-      "readxl",
-      "corrplot",
-      "randomForest",
-      "caTools",
-      "pls"))
+    install.packages(c("shiny",
+    "shinydashboard",
+    "ggplot2",
+    "scatterD3",
+    "data.table",
+    "sqldf",
+    "dplyr",
+    "readxl",
+    "corrplot",
+    "randomForest",
+    "caTools",
+    "pls"))
 
 
 # EXECUTION
@@ -79,4 +79,7 @@ The ranges of these variables are:
 * `max_speed_t_2_predator` (m/s): [30, 50)
 * `turn_rate_max_t_1` (rad/s): [0.25, 1.5)
 * `allow_prey_switching_t_2_predator`: True, False
+
+
+
 
