@@ -7,6 +7,8 @@ library(plyr)
 library(readxl)
 library(datasets)
 library(corrplot)
+library(data.table)
+library(ggplot2)
 library(caTools)
 library(pls)
 
