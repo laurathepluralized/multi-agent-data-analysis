@@ -19,7 +19,7 @@ runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   numericCol <- numericCols
   categoryCol <- categoryCols
   
-  ##read useful variables only (specified above)
+  ##read useful varaibles only (specified above)
   mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
@@ -46,7 +46,7 @@ runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   colnames(mydata) <- cbind("result", NumericColToAdd, CatColToAdd)
   
   
-  ####Basic Correlation analysis for numeric variables
+  ####Basic Correlation analysis for numeric varibles
   Corr <- cor(mydata[,cbind("result", NumericColToAdd)])
   
   return(Corr)
@@ -66,7 +66,6 @@ runStablilityCheck <- function(data2, result_col, numericCols, categoryCols) {
   ##Clean missing data
   mydata <- na.omit(mydata)
   mydataOriginal <- mydata
-  mydata <- mydata[mydata$team_id > 1,]
   
   lastCol = length(mydata[1])
   for(i in 1:length(mydata$result)){
