@@ -66,7 +66,7 @@ run_modeling <- function(data2, model_selection) {
 
 
 # Fitting the model to the training set
-  if (model_selection == 1) { # Multivarite linear regression model
+  if (model_selection == 1) { # Multivariate linear regression model
     
     
     model = lm(formula = result ~., data = training_set)
