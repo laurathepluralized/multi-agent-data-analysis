@@ -376,8 +376,29 @@ server <- function(input, output, session) {
   # TODO: Get summaries and graphs working for all of the model types
   output$graph_modeling <- renderPlot({
     model = run_modeling(dsim, which(models == input$model_to_use))
-    par(mfrow=c(2,2))
-    plot(model,which=c(1:4), col = "cornflowerblue")
+    model_selection = which(models == input$model_to_use)
+    actual = result(dsim,model_selection)
+    fitted = ypred(dsim,model_selection)
+    if (model_selection == 1 | model_selection == 2) {
+      par(mfrow=c(2,2))
+      plot(model,which=c(1:4), col = "cornflowerblue")
+    } else if(model_selection == 3) {
+      plot(model, xlab = "Actual values",
+           ylab = "Predicted values", main = "Principal Component Regression predictions vs. actual"
+           , col = "cornflowerblue")
+    } else if(model_selection == 4) {
+      plot(model, xlab = "Actual values",
+           ylab = "Predicted values", main = "Partial Least Squares predictions vs. actual"
+           , col = "cornflowerblue")
+    } else if(model_selection == 5) {
+      plot(actual, fitted, xlab = "Actual values",
+           ylab = "Predicted values", main = "Random Forest Regression predictions vs. actual"
+           , col = "cornflowerblue")
+    } else {
+      plot(actual, fitted, xlab = "Actual values",
+           ylab = "Predicted values", main = "Neural Network predictions vs. actual"
+           , col = "cornflowerblue")
+    }
   })
 }
 shinyApp(ui = ui, server = server)
