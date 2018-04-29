@@ -13,9 +13,33 @@ library(caTools)
 library(pls)
 
 
-# The function
 run_modeling <- function(data2, model_selection) {
   result_col = "NonTeamCapture"
+  
+  # Variables varied: {values they had}
+  # max_speed_t_1: {25}
+  # max_speed_t_2_predator: {30 40 50}
+  # turn_rate_max_t_1: {0.25 0.5 0.75 1.0 1.25 1.5}
+  # turn_rate_max_predator: {0.5}
+  # allow_prey_switching_t_2_predator: {True False}
+  
+  ########provide column names of numeric variables
+  numericCol <- c("turn_rate_max_t_1",
+                  "max_speed_t_2_predator",
+                  "allow_prey_switching_t_2_predator")
+  # numericCol <- colnames(data[sapply(data, is.numeric)])
+  
+  categoryCol <- c("team_id",
+                   "allow_prey_switching_t_2_predator")
+  
+  model = run_modelingWithParams(data2, result_col, numericCol, categoryCol , model_selection)
+  
+  return (model)
+}
+
+# The function
+run_modelingWithParams <- function(data2, result_col, numericCol, categoryCol , model_selection) {
+  
 
 ##specify response variable (y) and name it result
   colnames(data2)[colnames(data2) == result_col] <- 'result'
@@ -24,25 +48,12 @@ run_modeling <- function(data2, model_selection) {
   dataTypes <- sapply(data, class)
   resultCol <- data['result']
 
-# Variables varied: {values they had}
-# max_speed_t_1: {25}
-# max_speed_t_2_predator: {30 40 50}
-# turn_rate_max_t_1: {0.25 0.5 0.75 1.0 1.25 1.5}
-# turn_rate_max_predator: {0.5}
-# allow_prey_switching_t_2_predator: {True False}
-
-########provide column names of numeric variables
-  numericCol <- c("turn_rate_max_t_1",
-                  "max_speed_t_2_predator",
-                  "allow_prey_switching_t_2_predator")
-# numericCol <- colnames(data[sapply(data, is.numeric)])
 
 ########provide column names of category variables
-  categoryCol <- c("team_id",
-                   "allow_prey_switching_t_2_predator")
+  
 
 ##read useful variables only (specified above)
-  mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
+  mydata <- cbind(data$result, data[ append(numericCol, categoryCol)])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
 
 ##Clean missing data
@@ -66,7 +77,7 @@ run_modeling <- function(data2, model_selection) {
 
 
 # Fitting the model to the training set
-  if (model_selection == 1) { # Multivariate linear regression model
+  if (model_selection == 1) { # Multivarite linear regression model
     
     
     model = lm(formula = result ~., data = training_set)
