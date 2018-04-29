@@ -40,7 +40,6 @@ run_modeling <- function(data2, model_selection) {
 
 # The function
 run_modelingWithParams <- function(data2, result_col, numericCol, categoryCol , model_selection) {
-  
 
 ##specify response variable (y) and name it result
   colnames(data2)[colnames(data2) == result_col] <- 'result'
@@ -59,7 +58,7 @@ run_modelingWithParams <- function(data2, result_col, numericCol, categoryCol , 
 
 ##Clean missing data
   mydata <- na.omit(mydata)
-  mydata <- mydata[mydata$team_id > 1,]
+  # mydata <- mydata[mydata$team_id > 1,]
   boxcox = FALSE
 
   if(boxcox){
@@ -122,20 +121,8 @@ run_modelingWithParams <- function(data2, result_col, numericCol, categoryCol , 
 #plot(model$fitted.values, model$residuals)
 }
 
-
-
-
-
-
-
-
-
-
-
-
 ###### fitted values
-ypred <- function(data2, model_selection) {
-  result_col = "NonTeamCapture"
+ypred <- function(data2, result_col, numericCol, categoryCol , model_selection) {
   
   ##specify response variable (y) and name it result
   colnames(data2)[colnames(data2) == result_col] <- 'result'
@@ -151,23 +138,22 @@ ypred <- function(data2, model_selection) {
   # turn_rate_max_predator: {0.5}
   # allow_prey_switching_t_2_predator: {True False}
   
-  ########provide column names of numeric variables
-  numericCol <- c("turn_rate_max_t_1",
-                  "max_speed_t_2_predator",
-                  "allow_prey_switching_t_2_predator")
-  # numericCol <- colnames(data[sapply(data, is.numeric)])
-  
-  ########provide column names of category variables
-  categoryCol <- c("team_id",
-                   "allow_prey_switching_t_2_predator")
+  # ########provide column names of numeric variables
+  # numericCol <- c("turn_rate_max_t_1",
+  #                 "max_speed_t_2_predator",
+  #                 "allow_prey_switching_t_2_predator")
+  # # numericCol <- colnames(data[sapply(data, is.numeric)])
+  # 
+  # ########provide column names of category variables
+  # categoryCol <- c("team_id",
+  #                  "allow_prey_switching_t_2_predator")
   
   ##read useful variables only (specified above)
-  mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
+  mydata <- cbind(data$result, data[ append(numericCol, categoryCol)])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
   ##Clean missing data
   mydata <- na.omit(mydata)
-  mydata <- mydata[mydata$team_id > 1,]
   boxcox = FALSE
   
   if(boxcox){
@@ -222,8 +208,7 @@ ypred <- function(data2, model_selection) {
 
 
 ###### actual values
-result <- function(data2, model_selection) {
-  result_col = "NonTeamCapture"
+result <- function(data2, result_col, numericCol, categoryCol, model_selection) {
   
   ##specify response variable (y) and name it result
   colnames(data2)[colnames(data2) == result_col] <- 'result'
@@ -240,22 +225,21 @@ result <- function(data2, model_selection) {
   # allow_prey_switching_t_2_predator: {True False}
   
   ########provide column names of numeric variables
-  numericCol <- c("turn_rate_max_t_1",
-                  "max_speed_t_2_predator",
-                  "allow_prey_switching_t_2_predator")
-  # numericCol <- colnames(data[sapply(data, is.numeric)])
-  
-  ########provide column names of category variables
-  categoryCol <- c("team_id",
-                   "allow_prey_switching_t_2_predator")
+  # numericCol <- c("turn_rate_max_t_1",
+  #                 "max_speed_t_2_predator",
+  #                 "allow_prey_switching_t_2_predator")
+  # # numericCol <- colnames(data[sapply(data, is.numeric)])
+  # 
+  # ########provide column names of category variables
+  # categoryCol <- c("team_id",
+  #                  "allow_prey_switching_t_2_predator")
   
   ##read useful variables only (specified above)
-  mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
+  mydata <- cbind(data$result, data[ append(numericCol, categoryCol)])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
   ##Clean missing data
   mydata <- na.omit(mydata)
-  mydata <- mydata[mydata$team_id > 1,]
   boxcox = FALSE
   
   if(boxcox){
