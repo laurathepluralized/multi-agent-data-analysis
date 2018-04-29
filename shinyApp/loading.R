@@ -18,20 +18,21 @@ handle_loading <- function(input, output, session) {
                                     sep = input$loading_hp_data_file_sep,
                                     quote = input$loading_hp_data_file_quote)
       
-      dsnames <- names(session$userData$data_file)
-      cat(file=stderr(), "options: ", dsnames)
+      populate_session_columns(session)
+      
+      session$userData$testText <- "testText"
+      
+      
+      
+      cat(file=stderr(), "options: ", session$userData$columnNames)
       cb_options <- list()
-      cb_options[ dsnames] <- dsnames
+      cb_options[ session$userData$columnNames] <- session$userData$columnNames
       updateCheckboxGroupInput(session, "loading_hp_data_file_headers",
                                label = "Check Box Group",
                                choices = cb_options,
                                selected = "")
       
       updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
-      
-      session$userData$columnNames <- dsnames[order(dsnames)]
-      
-      session$userData$testText <- "testText"
       
       if(input$loading_hp_data_file_disp == "head") {
         return(head(session$userData$data_file))
@@ -43,6 +44,48 @@ handle_loading <- function(input, output, session) {
     })
     
   )
+}
+
+isInteger <- function(number){
+  if(is.factor(number[1])) {
+    return (FALSE)
+  } else {
+    if(is.numeric(number[1])){
+      return (number[1]%%1==0)
+    } else {
+      return (FALSE)
+    }
+    
+  }
+}
+
+initialize_session_columns <- function(session){
+  session$userData$columnNamesCategoric <- reactiveVal()
+  session$userData$columnNamesNumeric <- reactiveVal()
+}
+
+populate_session_columns <- function(session){
+  print("loading column info")
+  #print(session$userData$data_file)
+  dsnames <- names(session$userData$data_file)
+  #print(c(">dsnames: ", dsnames))
+  session$userData$columnNames <- dsnames[order(dsnames)]
+  #print(c(">session col names", session$userData$columnNames))
+  
+  #generate and store numeric column options
+  numericColOptions <- dsnames[sapply(session$userData$data_file, is.numeric)]
+  #print(c(">numericColOptions:", numericColOptions))
+  session$userData$columnNamesNumeric(numericColOptions[order(numericColOptions)])
+  
+  
+  #generate and store categorical column options (integer and non numeric)
+  nonNumericColOptions <- dsnames[!sapply(session$userData$data_file, is.numeric)]
+  integerColOptions <- dsnames[sapply(session$userData$data_file, isInteger)]
+  
+  categoricalColOptions <- append(nonNumericColOptions, integerColOptions)
+  session$userData$columnNamesCategoric(categoricalColOptions[order(categoricalColOptions)])
+  
+  #print(c("columnNamesCategoric: ", session$userData$columnNamesCategoric ))
 }
 
 filedata_hp <- function(input){

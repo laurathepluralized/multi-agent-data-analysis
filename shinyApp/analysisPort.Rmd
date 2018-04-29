@@ -27,7 +27,7 @@ library(ggplot2)
 
 ######### Here meet must be customized by case ###################################################################################
 ######### set working directory to where your data is
-data2 <- read.csv('./data/alldata2.csv')
+data2 <- read.csv('./data/default_data.csv')
 
 result_col = "NonTeamCapture"
 
@@ -39,33 +39,32 @@ dataTypes <- sapply(data, class)
 resultCol <- data['result']
 
 # Variables varied: {values they had}
-# max_speed_t_1 = vel_max_t_1: {40 50}
-# max_speed_t_2_predator = vel_max_t_2: {10 20 30 40 50}
-# turn_rate_max_t_1: {0.25 0.5 0.75}
-# turn_rate_max_predator: {0.25 0.5 0.75}
+# max_speed_t_1: {25}
+# max_speed_t_2_predator: {30 40 50}
+# turn_rate_max_t_1: {0.25 0.5 0.75 1.0 1.25 1.5}
+# turn_rate_max_predator: {0.5}
 # allow_prey_switching_t_2_predator: {True False}
-# 180 combinations
 
 ########provide column names of numeric variables
-numericCol <- c("vel_max.t.1",
-"vel_max.predator",
-"pitch_rate_max.predator",
-"turn_rate_max.predator")
+  numericCol <- c("turn_rate_max_t_1",
+                  "max_speed_t_2_predator",
+                  "allow_prey_switching_t_2_predator")
+
 # numericCol <- colnames(data[sapply(data, is.numeric)])
 
 ########provide column names of category variables
 categoryCol <- c("team_id",
-"allow_prey_switching.t.2.predator")
-# categoryCol <- 
+                 "allow_prey_switching_t_2_predator")
 
-##read useful varaibles only (specified above)
+
+##read useful variables only (specified above)
 mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
 colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
 
 ##Clean missing data
 mydata <- na.omit(mydata)
 #mydataOriginal <- mydata
-#mydata <- mydata[mydata$team_id > 1,]
+mydata <- mydata[mydata$team_id > 1,]
 
 lastCol = length(mydata[1])
 for(i in 1:length(mydata$result)){
@@ -124,7 +123,7 @@ library(corrplot)
 ######### set working directory to where your data is
 #setwd("D:/CSE_project")
 #setwd("~/Desktop/cse")
-data1 <- read.csv('./data/alldata2.csv')
+data1 <- read.csv('./data/default_data.csv')
 data <- data1
 #attach(data)
 #hist(NonTeamCapture)
@@ -155,22 +154,31 @@ data <- data1
 ##specify response variable (y) and name it result
 colnames(data)[colnames(data) == 'NonTeamCapture'] <- 'result'
 
-########provide column names of meaningful numeric variables
-numericCol <- c("vel_max.t.1",
-                    "vel_max.predator",
-                    "pitch_rate_max.predator",
-                    "turn_rate_max.predator")
+# Variables varied: {values they had}
+# max_speed_t_1: {25}
+# max_speed_t_2_predator: {30 40 50}
+# turn_rate_max_t_1: {0.25 0.5 0.75 1.0 1.25 1.5}
+# turn_rate_max_predator: {0.5}
+# allow_prey_switching_t_2_predator: {True False}
 
-########provide column names of meaningful category variables
+########provide column names of numeric variables
+numericCol <- c("turn_rate_max_t_1",
+              "max_speed_t_2_predator",
+              "allow_prey_switching_t_2_predator")
+
+# numericCol <- colnames(data[sapply(data, is.numeric)])
+
+########provide column names of category variables
 categoryCol <- c("team_id",
-                     "allow_prey_switching.t.2.predator")
+                 "allow_prey_switching_t_2_predator")
 
-##read useful varaibles only (specified above)
+##read useful variables only (specified above)
 mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
 colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
 
 ##Clean missing data
 mydata <- na.omit(mydata)
+mydata <- mydata[mydata$team_id > 1,]
 mydataOriginal <- mydata
 
 ##Drop columns of no information (only one value exists)
@@ -192,11 +200,11 @@ mydata <- cbind(mydata$result, mydata[,NumericColToAdd] , mydata[,CatColToAdd])
 colnames(mydata) <- cbind("result", NumericColToAdd, CatColToAdd)
 
 
-####Basic Correlation analysis for numeric varibles
+####Basic Correlation analysis for numeric variables
 Corr <- cor(mydata[,cbind("result", NumericColToAdd)])
 corrplot(Corr, method="circle")
 
-######Basic one-way Anova for category varaibles
+######Basic one-way Anova for category variables
 # anova <- aov(result ~ team_id, data=mydata)
 # h2<-sqldf("select result from mydata where team_id =0")
 # h1<-sqldf("select result from mydata where team_id =1")

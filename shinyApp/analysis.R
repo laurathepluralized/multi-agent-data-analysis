@@ -9,7 +9,6 @@ library(data.table)
 library(ggplot2)
 library(randomForest)
 
-library(corrplot)
 
 runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   numericCol <- numericCols
@@ -21,7 +20,7 @@ runCorrelation <- function(data, result_col,  numericCols, categoryCols){
   categoryCol <- categoryCols
   
   ##read useful varaibles only (specified above)
-  mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
+  mydata <- cbind(data$result, data[append(numericCol , categoryCol)])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
   ##Clean missing data
@@ -61,13 +60,12 @@ runStablilityCheck <- function(data2, result_col, numericCols, categoryCols) {
   data <- data2
   
   ##read useful variables only (specified above)
-  mydata <- cbind(data$result, data[,numericCol] , data[,categoryCol])
+  mydata <- cbind(data$result, data[append(numericCol, categoryCol)])
   colnames(mydata)[colnames(mydata) == 'data$result'] <- 'result'
   
   ##Clean missing data
   mydata <- na.omit(mydata)
   mydataOriginal <- mydata
-  mydata <- mydata[mydata$team_id > 0,]
   
   lastCol = length(mydata[1])
   for(i in 1:length(mydata$result)){
