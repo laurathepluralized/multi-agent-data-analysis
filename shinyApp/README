@@ -4,7 +4,7 @@ Adding the working versions of the Shiny App visualizations.
 ## Installation
 ### Analysis Tool Installation
 1. Install R (https://www.r-project.org/)
-2. Execute packageInstall.R
+2. From the "R" command shell run ```source("installPackages.R")```
 3. ...
 
 ## Sample Analysis Flow
