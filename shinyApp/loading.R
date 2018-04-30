@@ -65,6 +65,7 @@ initialize_session_columns <- function(session){
   session$userData$columnNamesCategoric <- reactiveVal()
   session$userData$columnNamesNumeric <- reactiveVal()
   session$userData$reactiveData <- reactiveVal()
+  session$userData$columnNamesReactive <- reactiveVal()
 }
 
 populate_session_columns <- function(session){
@@ -73,6 +74,7 @@ populate_session_columns <- function(session){
   dsnames <- names(session$userData$data_file)
   #print(c(">dsnames: ", dsnames))
   session$userData$columnNames <- dsnames[order(dsnames)]
+  session$userData$columnNamesReactive(session$userData$columnNames)
   #print(c(">session col names", session$userData$columnNames))
   
   #generate and store numeric column options
