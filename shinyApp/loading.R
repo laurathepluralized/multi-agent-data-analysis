@@ -18,6 +18,8 @@ handle_loading <- function(input, output, session) {
                                     sep = input$loading_hp_data_file_sep,
                                     quote = input$loading_hp_data_file_quote)
       
+      session$userData$reactiveData(session$userData$data_file)
+      
       populate_session_columns(session)
       
       session$userData$testText <- "testText"
@@ -62,6 +64,7 @@ isInteger <- function(number){
 initialize_session_columns <- function(session){
   session$userData$columnNamesCategoric <- reactiveVal()
   session$userData$columnNamesNumeric <- reactiveVal()
+  session$userData$reactiveData <- reactiveVal()
 }
 
 populate_session_columns <- function(session){
