@@ -192,7 +192,7 @@ ypred <- function(data2, result_col, numericCol, categoryCol , model_selection) 
     model = plsr(result~., data = training_set, ncomp = dim(training_set)[2]-1, validation ="CV")
     plsCV<- RMSEP(model, estimate = "CV")
     #plot(plsCV, main = "")
-    param_num <- which.min(plsCV$val)
+    param_num <- min(which.min(plsCV$val), dim(training_set)[2]-1)
     y_pred = predict(model,test_set,ncomp = param_num)
   } else if (model_selection == 5) { # Random Forest Regression
     library(randomForest)
