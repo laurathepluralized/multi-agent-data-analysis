@@ -35,8 +35,8 @@ scatterIntegratedUI <- function(id, label = "Correlation Analysis"){
       
       fluidRow(
         box(
-          selectInput(ns('theparamx'), 'Select parameter to plot on x-axis', names(dsim[paramcols])),
-          selectInput(ns('themetricy'), 'Select metric to plot on y-axis', names(dsim[metriccols]))
+          selectInput(ns('theparamx'), 'Select parameter to plot on x-axis', c()),
+          selectInput(ns('themetricy'), 'Select metric to plot on y-axis', c())
         ),
         box(
           uiOutput(ns('valuefixers'))
@@ -44,7 +44,7 @@ scatterIntegratedUI <- function(id, label = "Correlation Analysis"){
       ),
       fluidRow(
         box(
-          plotOutput(("plot_scatter"), click = "plot_click", brush = "plot_brush")
+          plotOutput(ns("plot_scatter"), click = "plot_click", brush = "plot_brush")
         ),
         verbatimTextOutput(ns("info_scatter"))
       )
@@ -55,10 +55,46 @@ scatterIntegratedUI <- function(id, label = "Correlation Analysis"){
 # Module server function
 scatterIntegrated <- function(input, output, session, stringsAsFactors) {
   
+  output$placeHolder <- renderText({
+    cb_options <- list()
+    cb_options[ session$userData$columnNames ] <- session$userData$columnNames
+    updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
+    
+    cb_categorical_options <- list()
+    cb_categorical_options[ session$userData$columnNamesCategoric() ] <- session$userData$columnNamesCategoric()
+    updateCheckboxGroupInput(session, "categoricalCols",
+                             label = "Select Pertinent Categorical Variables",
+                             choices = cb_categorical_options,
+                             selected = "")
+    
+    cb_numerical_options <- list()
+    cb_numerical_options[ session$userData$columnNamesNumeric() ] <- session$userData$columnNamesNumeric()
+    updateCheckboxGroupInput(session, "numericCols",
+                             label = "Select Pertinent Numeric Variables",
+                             choices = cb_numerical_options,
+                             selected = "")
+    
+    cb_x_options <- list()
+    cb_x_options[ session$userData$columnNames ] <- session$userData$columnNames
+    updateSelectInput(session, 'theparamx', 'Select parameter to plot on x-axis', cb_x_options)
+    
+    cb_y_options <- list()
+    cb_y_options[ session$userData$columnNames ] <- session$userData$columnNames
+    updateSelectInput(session, 'theparamy', 'Select parameter to plot on y-axis', cb_y_options)
+    
+    paste(sep = "",
+          "protocol: ", session$clientData$url_protocol, "\n",
+          "hostname: ", session$clientData$url_hostname, "\n",
+          "pathname: ", session$clientData$url_pathname, "\n",
+          "port: ",     session$clientData$url_port,     "\n",
+          "search: ",   session$clientData$url_search,   "\n"
+    )
+  })
+  
   variables = reactiveValues(not_to_plot_params = c())
   
   observeEvent(input$theparamx, {
-    variables$not_to_plot_params = paramcols[paramcols != input$theparamx]
+    variables$not_to_plot_params = session$userData$columnNames[session$userData$columnNames != input$theparamx]
   })
   
   #reactive({not_to_plot_params <- paramcols[paramcols != input$theparamx]})
@@ -67,13 +103,13 @@ scatterIntegrated <- function(input, output, session, stringsAsFactors) {
   #a <- 1
   #b <- 10
   mydata <- reactive({
-    dsim[, c(input$theparamx, input$themetricy)]
+    session$userData$reactiveData()[, c(input$theparamx, input$themetricy)]
   })
   
   
   output$valuefixers <- renderUI({
-    valuefixers <- lapply(1:length(paramcols), function(i) {
-      thevals <- dsim[paramcols[i]]
+    valuefixers <- lapply(1:length(session$userData$columnNames), function(i) {
+      thevals <- session$userData$data_file[session$userData$columnNames[i]]
       inname <- names(thevals)
       # only make a variable-fixing element if this isn't the x-axis var
       if (inname != input$theparamx) {
@@ -101,12 +137,12 @@ scatterIntegrated <- function(input, output, session, stringsAsFactors) {
   
   plotIsScatter <- TRUE
   output$plot_scatter<- renderPlot({
-    data = dsim 
+    data = session$userData$data_file 
     to_plot = data
     # we are only looking at team 2 right now; obviously remove this next line
     # if your metrics cover multiple teams
     # TODO: add an input to select this?
-    to_plot = to_plot[which(to_plot['team_id'] == 2),]
+    # to_plot = to_plot[which(to_plot['team_id'] == 2),]
     if (!is.null(to_plot)) {
       for (i in 1:length(variables$not_to_plot_params)) {
         param = variables$not_to_plot_params[i]
@@ -129,7 +165,7 @@ scatterIntegrated <- function(input, output, session, stringsAsFactors) {
         }
       }
       if (NROW(to_plot) > 0) {
-        if (is.numeric(dsim[,input$theparamx][1])) {
+        if (is.numeric(session$userData$data_file[,input$theparamx][1])) {
           plot(to_plot[ c(input$theparamx, input$themetricy)])
           plotIsScatter <- TRUE
         } else {
