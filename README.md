@@ -80,3 +80,10 @@ The ranges of these variables are:
 * `turn_rate_max_t_1` (rad/s): [0.25, 1.5)
 * `allow_prey_switching_t_2_predator`: True, False
 
+## Data Loading
+While the application automatically loads a sample set of data, the CSV loading page can be used to upload other datasets.
+To upload a new CSV file, first indicate if your CSV file has a header row, then use the "Browse" button to bring up a file selection dialog.
+
+### Stability Analysis
+On this page you can select the pertinent Categorical and Numeric variables, along with a Target variable for running a stability analysis. Please take care not to let any of the selection sets overlap.
+Then start the stability analysis by clicking the "Run Stability Analysis" button.
