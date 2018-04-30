@@ -87,3 +87,9 @@ To upload a new CSV file, first indicate if your CSV file has a header row, then
 ### Stability Analysis
 On this page you can select the pertinent Categorical and Numeric variables, along with a Target variable for running a stability analysis. Please take care not to let any of the selection sets overlap.
 Then start the stability analysis by clicking the "Run Stability Analysis" button.
+
+Once the stability analysis completes, you should see a table containing one row for each unique combination of input factors. Each of these rows will list the values for each input factor along with distribution information about the output variable associated with the input values.
+
+### Correlation Analysis
+On this page you can select the pertinent Categorical and Numeric variables, along with a Target variable for running a Correlation analysis. Please take care not to let any of the selection sets overlap.
+Then start the stability analysis by clicking the "Run Stability Analysis" button.
