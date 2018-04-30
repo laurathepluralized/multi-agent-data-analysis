@@ -21,6 +21,7 @@ source("analysis.R")
 source("loading.R")
 source("stability.R")
 source("correlation_analysis.R")
+source("modellingTab.R")
 
 # Read Default CSV into R
 
@@ -34,14 +35,6 @@ default_columns <- dsnames[order(dsnames)]
 paramcols <- c('turn_rate_max_t_1','max_speed_t_2_predator','allow_prey_switching_t_2_predator')
 
 metriccols <- c('NonTeamCapture')
-
-# These are the types of modeling we can use in the modeling tab
-models <- c('Multivariate linear regression',
-            'Linear regression with AIC',
-            'Principal component regression (using PCA)',
-            'Partial least squares',
-            'Random Forest Regression',
-            'Neural networks')
 
 #recommendation <- read.csv('recommendation.csv',stringsAsFactors = F,header=T)
 #head(dsim)
@@ -136,12 +129,7 @@ ui <- dashboardPage(
 # --- end K-Means Clustering MIT-licensed UI code
 
       ),
-      tabItem(tabName='modeling',
-        h2("Modeling"),
-        selectInput('model_to_use', 'Select Which Model To Use', models),
-        plotOutput("graph_modeling"),
-        verbatimTextOutput("info_modeling")
-      ),
+      tabItem(tabName='modeling', modellingTabUI("modellingTab", "Model Fitting")),
       #3rd tab content
       tabItem(tabName="scatter",
         h2("Interactive Scatterplot"),
@@ -175,6 +163,7 @@ server <- function(input, output, session) {
   handle_loading(input, output, session)
   callModule(stabilityAnalysis, "stability", stringsAsFactors = FALSE)
   callModule(correlationAnalysis, "correTab", stringsAsFactors = FALSE)
+  callModule(modellingTab, "modellingTab", stringsAsFactors = FALSE)
 
   
   #This previews the CSV data file
@@ -364,41 +353,59 @@ server <- function(input, output, session) {
   #model = run_modeling(dsim, 1)
 
 
-  # Writes the summary output of run_modeling
-  # TODO: Get the summary working for all model types
-  output$info_modeling <- renderPrint({
-    model = run_modeling(dsim, which(models == input$model_to_use))
-    #input$model_to_use
-    summary(model)
-  })
-
-  # Draws the graph output of the model from run_modeling
-  # TODO: Get summaries and graphs working for all of the model types
-  output$graph_modeling <- renderPlot({
-    model = run_modeling(dsim, which(models == input$model_to_use))
-    model_selection = which(models == input$model_to_use)
-    actual = result(dsim,model_selection)
-    fitted = ypred(dsim,model_selection)
-    if (model_selection == 1 | model_selection == 2) {
-      par(mfrow=c(2,2))
-      plot(model,which=c(1:4), col = "cornflowerblue")
-    } else if(model_selection == 3) {
-      plot(model, xlab = "Actual values",
-           ylab = "Predicted values", main = "Principal Component Regression predictions vs. actual"
-           , col = "cornflowerblue")
-    } else if(model_selection == 4) {
-      plot(model, xlab = "Actual values",
-           ylab = "Predicted values", main = "Partial Least Squares predictions vs. actual"
-           , col = "cornflowerblue")
-    } else if(model_selection == 5) {
-      plot(actual, fitted, xlab = "Actual values",
-           ylab = "Predicted values", main = "Random Forest Regression predictions vs. actual"
-           , col = "cornflowerblue")
-    } else {
-      plot(actual, fitted, xlab = "Actual values",
-           ylab = "Predicted values", main = "Neural Network predictions vs. actual"
-           , col = "cornflowerblue")
-    }
-  })
+# <<<<<<< HEAD
+#   # # Writes the summary output of run_modeling
+#   # # TODO: Get the summary working for all model types
+#   # output$info_modeling <- renderPrint({
+#   #   model = run_modeling(dsim, which(models == input$model_to_use))
+#   #   #input$model_to_use
+#   #   summary(model)
+#   # })
+# 
+#   # # Draws the graph output of the model from run_modeling
+#   # # TODO: Get summaries and graphs working for all of the model types
+#   # output$graph_modeling <- renderPlot({
+#   #   model = run_modeling(dsim, which(models == input$model_to_use))
+#   #   par(mfrow=c(2,2))
+#   #   plot(model,which=c(1:4), col = "cornflowerblue")
+#   # })
+# =======
+#   # Writes the summary output of run_modeling
+#   # TODO: Get the summary working for all model types
+#   output$info_modeling <- renderPrint({
+#     model = run_modeling(dsim, which(models == input$model_to_use))
+#     #input$model_to_use
+#     summary(model)
+#   })
+# 
+#   # Draws the graph output of the model from run_modeling
+#   # TODO: Get summaries and graphs working for all of the model types
+#   output$graph_modeling <- renderPlot({
+#     model = run_modeling(dsim, which(models == input$model_to_use))
+#     model_selection = which(models == input$model_to_use)
+#     actual = result(dsim,model_selection)
+#     fitted = ypred(dsim,model_selection)
+#     if (model_selection == 1 | model_selection == 2) {
+#       par(mfrow=c(2,2))
+#       plot(model,which=c(1:4), col = "cornflowerblue")
+#     } else if(model_selection == 3) {
+#       plot(model, xlab = "Actual values",
+#            ylab = "Predicted values", main = "Principal Component Regression predictions vs. actual"
+#            , col = "cornflowerblue")
+#     } else if(model_selection == 4) {
+#       plot(model, xlab = "Actual values",
+#            ylab = "Predicted values", main = "Partial Least Squares predictions vs. actual"
+#            , col = "cornflowerblue")
+#     } else if(model_selection == 5) {
+#       plot(actual, fitted, xlab = "Actual values",
+#            ylab = "Predicted values", main = "Random Forest Regression predictions vs. actual"
+#            , col = "cornflowerblue")
+#     } else {
+#       plot(actual, fitted, xlab = "Actual values",
+#            ylab = "Predicted values", main = "Neural Network predictions vs. actual"
+#            , col = "cornflowerblue")
+#     }
+#   })
+# >>>>>>> master
 }
 shinyApp(ui = ui, server = server)
