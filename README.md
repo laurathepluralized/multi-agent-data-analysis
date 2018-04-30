@@ -52,8 +52,7 @@ Demo data is included with the Shiny application, in the shinyApp/data
 directory.
 Future work on this application will see the data upload feature interact
 with the entire set of visualization and analysis tools, but for the current
-iteration, the following filepaths can be modified in the code to try different
-datasets.
+iteration, the filepaths can be modified in the code to try different datasets.
 The included datasets are described below:
 
 
@@ -79,6 +78,30 @@ The ranges of these variables are:
 * `max_speed_t_2_predator` (m/s): [30, 50)
 * `turn_rate_max_t_1` (rad/s): [0.25, 1.5)
 * `allow_prey_switching_t_2_predator`: True, False
+
+If you wish to analyze your own dataset that was generated with SCRIMMAGE,
+use the pythonStuff/outfiles2condensed.py aggregation script to aggregate the
+results and mission file parameters.
+
+Run the following to see an explanation of the aggregation script's inputs:
+
+    python3 pythonStuff/outfiles2condensed.py --help
+
+A sample run of outfiles2condensed might look like this:
+
+    python3 scripts/outfiles2condensed.py --path ~/.scrimmage/logs \
+        --filename my_agg_data -c -r
+
+After aggregating your data with outfiles2condensed, if you are doing similar
+predator-vs-prey simulations to the demo simulations, run the following
+(or similar; replace the path with the path to your CSV file, no extension) to
+remove unnecessary columns from your data:
+    
+    python3 pythonStuff/clean_data.py --path ~/.scrimmage/logs/my_agg_data
+
+The cleaned output file name will be amended with the suffix _clean but will be 
+in the same directory as the uncleaned data.
+
 
 ## Data Loading
 While the application automatically loads a sample set of data, the CSV loading 
