@@ -22,7 +22,11 @@ correlationAnalysisUI <- function(id, label = "Correlation Analysis"){
         
       ),
       fluidRow(
-        box(plotOutput(ns('correlation'), width = "100%", height = "400px"))
+        box(
+          title = "Correlation Plot",
+          helpText("The correlation plot shows positive correlation as blue circles. Negative correlation, if it were present, would show as red circles."),
+          plotOutput(ns('correlation'), width = "100%", height = "400px")
+          )
       )
     )
   )

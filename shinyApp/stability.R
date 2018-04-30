@@ -21,6 +21,7 @@ stabilityAnalysisUI <- function(id, label="Stability UI"){
     fluidRow(
       box(width=12,
           title = "Stability Analysis",
+          helpText("N is the number of simulation runs in the dataset that all share a given unique set of parameters. The mean column provides the mean of the target result for that parameter loadout, sd is the standard deviation of the distribution of the results, and cov is the coefficient of variation. Large standard deviations and COVs > 100% indicate that additional simulations need to be run; the results are dominated by stochasticity."),
           column(12,
                  div(style = 'overflow-x: scroll', dataTableOutput(ns('stabilityAnalysisResult')))
           )
