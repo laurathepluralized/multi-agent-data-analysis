@@ -7,9 +7,9 @@ handle_loading <- function(input, output, session) {
     output$loading_hp_data_file_preview <-  renderDataTable({
       cat(file=stderr(), "handle preview")
       
-      # input$loading_hp_data_file will be NULL initially. After the user selects
-      # and uploads a file, head of that data file by default,
-      # or all rows if selected, will be shown.
+      # input$loading_hp_data_file will be NULL initially.
+      # After the user selects and uploads a file, head of that data
+      # file by default, or all rows if selected, will be shown.
       
       req(input$loading_hp_data_file)
       
@@ -24,15 +24,23 @@ handle_loading <- function(input, output, session) {
       
       
       
-      cat(file=stderr(), "options: ", session$userData$columnNames)
+      # cat(file=stderr(), "options: ", session$userData$columnNames)
       cb_options <- list()
       cb_options[ session$userData$columnNames] <- session$userData$columnNames
-      updateCheckboxGroupInput(session, "loading_hp_data_file_headers",
-                               label = "Check Box Group",
+      updateCheckboxGroupInput(session, "loading_hp_data_file_headers_num",
+                               label = "Select numerical parameter columns",
+                               choices = cb_options,
+                               selected = "")
+      updateCheckboxGroupInput(session, "loading_hp_data_file_headers_cat",
+                               label = "Select categorical parameter columns",
                                choices = cb_options,
                                selected = "")
       
       updateSelectInput(session,"theTargetParam", label = "Target Variable", choices = cb_options, selected = cb_options[1])
+
+      session$userData$numParamCols <- loading_hp_data_file_headers_num
+      session$userData$catParamCols <- loading_hp_data_file_headers_cat
+      session$userData$targCols <- theTargetParam
       
       if(input$loading_hp_data_file_disp == "head") {
         return(head(session$userData$data_file))
@@ -109,8 +117,12 @@ handle_displaying_column_options <- function(input, output, session){
       dsnames <- names(filedata_hp(input))
       cb_options <- list()
       cb_options[ dsnames] <- dsnames
-      updateCheckboxGroupInput(session, "loading_hp_data_file_headers",
-                               label = "Check Box Group",
+      updateCheckboxGroupInput(session, "loading_hp_data_file_headers_num",
+                               label = "Select numerical parameter columns",
+                               choices = cb_options,
+                               selected = "")
+      updateCheckboxGroupInput(session, "loading_hp_data_file_headers_cat",
+                               label = "Select categorical parameter columns",
                                choices = cb_options,
                                selected = "")
     })
@@ -129,8 +141,9 @@ loading_ui <- function() {
                              ".csv")),
         
         # Input: Checkbox if file has header ----
-        checkboxInput("loading_hp_data_file_header", "Header", TRUE),
-        
+        checkboxInput("loading_hp_data_file_header", "Header", TRUE)
+      ), box(
+      
         # Input: Select separator ----
         radioButtons("loading_hp_data_file_sep", "Separator",
                      choices = c(Comma = ",",
@@ -146,24 +159,31 @@ loading_ui <- function() {
                      choices = c(None = "",
                                  "Double Quote" = '"',
                                  "Single Quote" = "'"),
-                     selected = '"')
-  ), box(
-    # Horizontal line ----
-    tags$hr(),
-    
-    # Input: Select number of rows to display ----
-    radioButtons("loading_hp_data_file_disp", "Display",
-                 choices = c(Head = "head",
-                             All = "all"),
-                 selected = "head"),
-    checkboxGroupInput("loading_hp_data_file_headers",
-                       "Checkbox group input:",
-                       c("Column names will show up" = "option1",
-                         "here post file load" = "option2")),
-    selectInput('theTargetParam', 'Select the target param', c("placeholder", "placeholder1"))
-  )
+                     selected = '"'),
+        # Input: Select number of rows to display ----
+        radioButtons("loading_hp_data_file_disp", "Display",
+                     choices = c(Head = "head",
+                                 All = "all"),
+                     selected = "head")
+      ), box(
   
-  )
+        checkboxGroupInput("loading_hp_data_file_headers_cat",
+                               "Select Pertinent Categorical Variables",
+                               c("Column names will show up" = "option1",
+                                 "here post file load" = "option2"))
+      ), box(
+        checkboxGroupInput("loading_hp_data_file_headers_num",
+                               "Select Pertinent Numerical Variables",
+                               c("Column names will show up" = "option1",
+                                 "here post file load" = "option2")),
+        tags$hr(),
+        # checkboxGroupInput("loading_hp_data_file_headers",
+        #                    "Checkbox group input:",
+        #                    c("Column names will show up" = "option1",
+        #                      "here post file load" = "option2")),
+        selectInput('theTargetParam', 'Select the target param', c("placeholder", "placeholder1"))
+      )
+    )
   )
 }
 

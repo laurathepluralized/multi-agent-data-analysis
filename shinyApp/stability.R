@@ -68,7 +68,10 @@ stabilityAnalysis <- function(input, output, session, stringsAsFactors){
     cat(file=stderr(), "\nrunning stability analysis with stabilityCategorical: ", input$stabilityCategorical)
     cat(file=stderr(), "\nrunning stability analysis with stabilityNumeric: ", input$stabilityNumeric)
     
-    stabilityResultIntermed <- runStablilityCheck(session$userData$data_file, input$theTargetParam, input$stabilityNumeric, input$stabilityCategorical)
+    stabilityResultIntermed <- runStablilityCheck(session$userData$data_file,
+                                                  input$theTargetParam,
+                                                  input$stabilityNumeric,
+                                                  input$stabilityCategorical)
     print(stabilityResultIntermed)
     output$stabilityAnalysisResult <- renderDataTable (
       stabilityResultIntermed
