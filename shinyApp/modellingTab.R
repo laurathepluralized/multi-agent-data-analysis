@@ -98,11 +98,13 @@ modellingTab <- function(input, output, session, stringsAsFactors) {
         par(mfrow=c(2,2))
         plot(model,which=c(1:4), col = "cornflowerblue")
       } else if(model_selection == 3) {
-        plot(model, xlab = "Actual values",
-             ylab = "Predicted values", main = "Principal Component Regression predictions vs. actual"
-             , col = "cornflowerblue")
+        # plot(model, xlab = "Actual values",
+        #      ylab = "Predicted values", main = "Principal Component Regression predictions vs. actual"
+        #      , col = "cornflowerblue")
+        par(mfrow=c(2,2))
+        plot(model,which=c(1:4), col = "cornflowerblue")
       } else if(model_selection == 4) {
-        plot(model, xlab = "Actual values",
+        plot(actual, fitted, xlab = "Actual values",
              ylab = "Predicted values", main = "Partial Least Squares predictions vs. actual"
              , col = "cornflowerblue")
       } else if(model_selection == 5) {
