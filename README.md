@@ -79,28 +79,6 @@ The ranges of these variables are:
 * `turn_rate_max_t_1` (rad/s): [0.25, 1.5)
 * `allow_prey_switching_t_2_predator`: True, False
 
-If you wish to analyze your own dataset that was generated with SCRIMMAGE,
-use the pythonStuff/outfiles2condensed.py aggregation script to aggregate the
-results and mission file parameters.
-
-Run the following to see an explanation of the aggregation script's inputs:
-
-    python3 pythonStuff/outfiles2condensed.py --help
-
-A sample run of outfiles2condensed might look like this:
-
-    python3 scripts/outfiles2condensed.py --path ~/.scrimmage/logs \
-        --filename my_agg_data -c -r
-
-After aggregating your data with outfiles2condensed, if you are doing similar
-predator-vs-prey simulations to the demo simulations, run the following
-(or similar; replace the path with the path to your CSV file, no extension) to
-remove unnecessary columns from your data:
-    
-    python3 pythonStuff/clean_data.py --path ~/.scrimmage/logs/my_agg_data
-
-The cleaned output file name will be amended with the suffix _clean but will be 
-in the same directory as the uncleaned data.
 
 
 ## Data Loading
@@ -152,5 +130,45 @@ loaded into the variable `dsim` and fill in the `paramcols` variable, the list
 of parameter columns, as appropriate for your dataset (the column names
 already in this list are correct for both default_data.csv and
 for pred-prey-lhs-small.csv).
+
+
+
+### Sidenote: Aggregating and cleaning data using included helper scripts
+
+If you wish to analyze your own dataset that was generated with SCRIMMAGE,
+use the pythonStuff/outfiles2condensed.py aggregation script to aggregate the
+results and mission file parameters.
+To use these tools, first run the following at the Ubuntu command line to
+install the Python3 dependencies.
+
+    sudo apt-get install python3-pip
+    sudo -H pip3 install os shutil sys platform subprocess numpy json \
+        pickle pandas pydoe glob argparse pdb
+
+If you are not using Ubuntu, the above instructions may not apply; follow
+your OS's procedure for installing Python 3
+(see https://www.python.org/downloads/), then install the dependency
+packages mentioned in the pip3 command.
+
+
+Run the following to see an explanation of the aggregation script's inputs:
+
+    python3 pythonStuff/outfiles2condensed.py --help
+
+A sample run of outfiles2condensed might look like this:
+
+    python3 scripts/outfiles2condensed.py --path ~/.scrimmage/logs \
+        --filename my_agg_data -c -r
+
+After aggregating your data with outfiles2condensed, if you are doing similar
+predator-vs-prey simulations to the demo simulations, run the following
+(or similar; replace the path with the path to your CSV file, no extension) to
+remove unnecessary columns from your data:
+    
+    python3 pythonStuff/clean_data.py --path ~/.scrimmage/logs/my_agg_data
+
+The cleaned output file name will be amended with the suffix _clean but will be 
+in the same directory as the uncleaned data.
+
 
 
