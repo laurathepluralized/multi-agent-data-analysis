@@ -68,10 +68,10 @@ modellingTab <- function(input, output, session, stringsAsFactors) {
   })
   
   observeEvent(input$runAnalysis, {
-    cat(file=stderr(), "\nrunning correlation analysis with: ", session$userData$testText)
-    cat(file=stderr(), "\nrunning correlation analysis with target val of : ", input$theTargetParam)
-    cat(file=stderr(), "\nrunning correlation analysis with stabilityCategorical: ", input$categoricalCols)
-    cat(file=stderr(), "\nrunning correlation analysis with stabilityNumeric: ", input$numericCols)
+    cat(file=stderr(), "\nrunning model fitting analysis with: ", session$userData$testText)
+    cat(file=stderr(), "\nrunning model fitting analysis with target val of : ", input$theTargetParam)
+    cat(file=stderr(), "\nrunning model fitting analysis with stabilityCategorical: ", input$categoricalCols)
+    cat(file=stderr(), "\nrunning model fitting analysis with stabilityNumeric: ", input$numericCols)
     
     # correlationResultIntermed <- runCorrelation(session$userData$data_file, input$theTargetParam, input$numericCols, input$categoricalCols)
     # print(correlationResultIntermed)
