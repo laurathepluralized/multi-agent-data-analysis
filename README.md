@@ -6,7 +6,7 @@ simulation output from multi-agent robotics simulations.
 In particular, it was built with simulation data from the SCRIMMAGE multi-agent 
 simulator (https://github.com/gtri/scrimmage/) in mind.
 
-## I don't want to use SCRIMMAGE, but I have lots of CSV files. Can I still use this tool?
+## I don't want to use SCRIMMAGE, but I have a CSV file I want to analyze. Can I still use this tool?
 Any non-temporal simulation data that can be put into a CSV file can be
 analyzed with this tool, with minor modifications (specifying column names
 and types, file locations).
@@ -81,15 +81,53 @@ The ranges of these variables are:
 * `allow_prey_switching_t_2_predator`: True, False
 
 ## Data Loading
-While the application automatically loads a sample set of data, the CSV loading page can be used to upload other datasets.
-To upload a new CSV file, first indicate if your CSV file has a header row, then use the "Browse" button to bring up a file selection dialog.
+While the application automatically loads a sample set of data, the CSV loading 
+page can be used to upload other datasets.
+To upload a new CSV file, first indicate if your CSV file has a header row, 
+then use the "Browse" button to bring up a file selection dialog.
 
 ### Stability Analysis
-On this page you can select the pertinent Categorical and Numeric variables, along with a Target variable for running a stability analysis. Please take care not to let any of the selection sets overlap.
-Then start the stability analysis by clicking the "Run Stability Analysis" button.
+On this page you can select the pertinent Categorical and Numeric variables, 
+along with a Target variable for running a stability analysis. Please take care 
+not to let any of the selection sets overlap.
+Then start the stability analysis by clicking the "Run Stability Analysis" 
+button.
+For the demonstration datasets included in the repositories, select the 
+following columns as noted:
+* `max_speed_t_2_predator`: numerical
+* `turn_rate_max_t_1`: numerical
+* `allow_prey_switching_t_2_predator`: categorical
+* 'team_id': categorical
+For the target variable, select `NonTeamCapture`.
 
-Once the stability analysis completes, you should see a table containing one row for each unique combination of input factors. Each of these rows will list the values for each input factor along with distribution information about the output variable associated with the input values.
+Once the stability analysis completes, you should see a table containing one 
+row for each unique combination of input factors. Each of these rows will list 
+the values for each input factor along with distribution information about the 
+output variable associated with the input values.
 
 ### Correlation Analysis
-On this page you can select the pertinent Categorical and Numeric variables, along with a Target variable for running a Correlation analysis. Please take care not to let any of the selection sets overlap.
-Then start the stability analysis by clicking the "Run Stability Analysis" button.
+On this page you can select the pertinent Categorical and Numeric variables, 
+along with a Target variable for running a Correlation analysis. Please take 
+care not to let any of the selection sets overlap.
+Then start the stability analysis by clicking the "Run Stability Analysis" 
+button.
+For the demonstration datasets included in the repositories, select the 
+following columns as noted:
+* `max_speed_t_2_predator`: numerical
+* `turn_rate_max_t_1`: numerical
+* `allow_prey_switching_t_2_predator`: categorical
+* 'team_id': categorical
+For the target variable, select `NonTeamCapture`.
+
+
+### Interactive Scatter/Box Plots
+In this tab, a dataset is uploaded automatically. (Future work is to integrate 
+it to use the data from the file upload tab, and to allow for selection of
+numerical and categorical columns from lists as in the other tabs.)
+If you wish to select another dataset, please change the filepath in `app.R` 
+loaded into the variable `dsim` and fill in the `paramcols` variable, the list
+of parameter columns, as appropriate for your dataset (the column names
+already in this list are correct for both default_data.csv and
+for pred-prey-lhs-small.csv).
+
+
